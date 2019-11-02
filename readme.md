@@ -1,22 +1,22 @@
 # zestaw komend początkującego proramisty: 
 
 ## aby skopiować na lokala całe repo
-> git clone adres_repozytorium <- pobiera repo do folderu z nazwą owego repo 
+>1. git clone adres_repozytorium <- pobiera repo do folderu z nazwą owego repo 
 
 ## aby wysłać swoje zmainay na repo, to po kolei:
-> git add . <- (bardzo ważna kropka nie zapomnijcie) dodaje wszystko na "scene" (koncept gita) nie trzeba się tym przejmować  
-> git commit -m "wiadomość" <- powiedzenie git ze checmy coś zmenić, wiadomość to krótka notka na temat co zrobiliście  
-> git push <- (z ang push => pchać) wysyłacie finalnie swoje zmiany na repo  
+>1. git add . <- (bardzo ważna kropka nie zapomnijcie) dodaje wszystko na "scene" (koncept gita) nie trzeba się tym przejmować  
+>2. git commit -m "wiadomość" <- powiedzenie git ze checmy coś zmenić, wiadomość to krótka notka na temat co zrobiliście  
+>3. git push <- (z ang push => pchać) wysyłacie finalnie swoje zmiany na repo  
 
 ## aby pobrać nowe zmany z repo
-> git pull <- z ang pull ciągnąć 
+>1. git pull <- z ang pull ciągnąć 
 
 
 ## aby uruchomić projekt
-> kopiujemy repo na lokala  
-> wchodzimy terminalem do folderu repo  
-> npm i <- (i od install) instlujemy wymagane paczki z package.json  
-> gulp <- odpalamy projekt w trybie nasłuchiwania (gdy zostanie wprowadzona zmiana do plikow w folderze app projekt zrobi rebuilda)  
+>1. kopiujemy repo na lokala  
+>2. wchodzimy terminalem do folderu repo  
+>3. npm i <- (i od install) instlujemy wymagane paczki z package.json  
+>4. gulp <- odpalamy projekt w trybie nasłuchiwania (gdy zostanie wprowadzona zmiana do plikow w folderze app projekt zrobi rebuilda)
 
 po ostatnim kroku powinna się otworzyć przeglądarka z adresem: "localhost:8080"
 
