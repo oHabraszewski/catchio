@@ -3,7 +3,7 @@
 ## aby skopiować na lokala całe repo
 >1. git clone adres_repozytorium <- pobiera repo do folderu z nazwą owego repo 
 
-## aby wysłać swoje zmainay na repo, to po kolei:
+## aby wysłać swoje zmiany na repo, to po kolei:
 >1. git add . <- (bardzo ważna kropka nie zapomnijcie) dodaje wszystko na "scene" (koncept gita) nie trzeba się tym przejmować  
 >2. git commit -m "wiadomość" <- powiedzenie git ze checmy coś zmenić, wiadomość to krótka notka na temat co zrobiliście  
 >3. git push <- (z ang push => pchać) wysyłacie finalnie swoje zmiany na repo  
@@ -24,7 +24,7 @@ po ostatnim kroku powinna się otworzyć przeglądarka z adresem: "localhost:808
 
 ## częste problemy 
 
-podczas git push, jeśli ktoś był szybszy od was i wysłał swoje zmiany wcześniej a wy ich jeszcze nie macie
+podczas git push, jeśli ktoś był szybszy od was i wysłał swoje zmiany wcześniej, a wy ich jeszcze nie macie
 rozwiązanie
 podążanie za instrukcjami gita
 
