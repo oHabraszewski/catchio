@@ -1,18 +1,18 @@
-zestaw komend początkującego proramisty: 
+# zestaw komend początkującego proramisty: 
 
-aby skopiować na lokala całe repo
+## aby skopiować na lokala całe repo
 > git clone adres_repozytorium <- pobiera repo do folderu z nazwą owego repo 
 
-aby wysłać swoje zmainay na repo, to po kolei:
+## aby wysłać swoje zmainay na repo, to po kolei:
 > git add . <- (bardzo ważna kropka nie zapomnijcie) dodaje wszystko na "scene" (koncept gita) nie trzeba się tym przejmować  
 > git commit -m "wiadomość" <- powiedzenie git ze checmy coś zmenić, wiadomość to krótka notka na temat co zrobiliście  
 > git push <- (z ang push => pchać) wysyłacie finalnie swoje zmiany na repo  
 
-aby pobrać nowe zmany z repo
+## aby pobrać nowe zmany z repo
 > git pull <- z ang pull ciągnąć 
 
 
-aby uruchomić projekt
+## aby uruchomić projekt
 > kopiujemy repo na lokala  
 > wchodzimy terminalem do folderu repo  
 > npm i <- (i od install) instlujemy wymagane paczki z package.json  
@@ -22,7 +22,7 @@ po ostatnim kroku powinna się otworzyć przeglądarka z adresem: "localhost:808
 
 
 
-częste problemy 
+## częste problemy 
 
 podczas git push, jeśli ktoś był szybszy od was i wysłał swoje zmiany wcześniej a wy ich jeszcze nie macie
 rozwiązanie
