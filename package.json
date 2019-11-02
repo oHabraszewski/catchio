@@ -1,24 +1,50 @@
 {
-  "name": "sfn2020",
-  "version": "0.0.1",
-  "description": "Game for SFN 2020",
-  "main": "index.js",
+  "name": "phaser-multiplayer-game-template",
+  "version": "1.0.0",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "gulp",
+    "build": "gulp build"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/oHabraszewski/sfn2020.git"
+  "devDependencies": {
+    "@babel/core": "^7.6.2",
+    "@babel/preset-env": "^7.6.2",
+    "autoprefixer": "^9.6.1",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.0.6",
+    "babel-minify-webpack-plugin": "^0.3.1",
+    "babel-polyfill": "^6.26.0",
+    "browser-sync": "^2.26.7",
+    "clean-webpack-plugin": "^3.0.0",
+    "css-loader": "^3.2.0",
+    "gulp": "^4.0.2",
+    "gulp-clean": "^0.4.0",
+    "gulp-imagemin": "^6.1.0",
+    "gulp-minify": "^3.1.0",
+    "gulp-nodemon": "^2.4.2",
+    "gulp-pretty-data": "^0.1.2",
+    "html-webpack-plugin": "^3.2.0",
+    "i": "^0.3.6",
+    "mini-css-extract-plugin": "^0.8.0",
+    "node-sass": "^4.12.0",
+    "npm": "^6.11.3",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "postcss-import": "^12.0.1",
+    "postcss-loader": "^3.0.0",
+    "sass-loader": "^8.0.0",
+    "through2": "^3.0.1",
+    "webpack": "^4.41.0",
+    "webpack-stream": "^5.2.1",
+    "webpack-strip-block": "^0.2.0",
+    "phaser": "^3.19.0"
   },
-  "author": "Informatyka PM",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/oHabraszewski/sfn2020/issues"
-  },
-  "homepage": "https://github.com/oHabraszewski/sfn2020#readme",
   "dependencies": {
-    "express": "^4.17.1",
-    "phaser": "^3.20.1",
+    "canvas": "^2.1.0",
+    "datauri": "^1.1.0",
+    "express": "^4.16.4",
+    "jsdom": "^13.0.0",
     "socket.io": "^2.3.0"
-  }
+  },
+  "browserslist": [
+    "last 2 versions"
+  ]
 }
