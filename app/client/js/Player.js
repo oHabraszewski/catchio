@@ -1,0 +1,1 @@
+//Plik zawierający ogólną klasę gracza

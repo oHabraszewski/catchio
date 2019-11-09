@@ -1,0 +1,1 @@
+//Plik zawierający klasę bramki - obiektu do którego będziemy zanosić "piłkę"

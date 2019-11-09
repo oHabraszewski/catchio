@@ -1,0 +1,1 @@
+//Plik zawierający klasę zarządzającą wszystkimi elementami interfejsu - Punktami, przyciskami itp.
