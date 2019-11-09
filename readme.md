@@ -1,40 +1,43 @@
-# zestaw komend początkującego proramisty: 
+# Zestaw komend początkującego programisty: 
 
-## aby skopiować na lokala całe repo
->1. git clone adres_repozytorium <- pobiera repo do folderu z nazwą owego repo 
+## Kopiowanie repozytorium z chmury na swój komputer
+>1. git clone *adres_repozytorium* <- Kopiuje repozytorium z chmury na komputer.
 
-## aby wysłać swoje zmiany na repo, to po kolei:
->1. git add . <- (bardzo ważna kropka nie zapomnijcie) dodaje wszystko na "scene" (koncept gita) nie trzeba się tym przejmować  
->2. git commit -m "wiadomość" <- powiedzenie git ze checmy coś zmenić, wiadomość to krótka notka na temat co zrobiliście  
->3. git push <- (z ang push => pchać) wysyłacie finalnie swoje zmiany na repo  
+## Zapisanie swoich zmian w repozytorium
+>1. git add * <- Dodaje do kolejki zmian, **jeszcze nie jest w repozytorium**
+>2. git commit -m "*Message*" <- Dodaje nasze zmiany z kolejki (up) do repozytorium. "Message" to krótki opis zmian, w celu łatwiejszej identyfikacji.
 
-## aby pobrać nowe zmany z repo
->1. git pull <- z ang pull ciągnąć 
+## Wysyłanie zmian na chmurę (Github)
+>1. git push <- (ang. push - pchać) Wysyła zmiany na chmurę Githuba.
 
-
-## aby uruchomić projekt
->1. kopiujemy repo na lokala  
->2. wchodzimy terminalem do folderu repo  
->3. npm i <- (i od install) instlujemy wymagane paczki z package.json  
->4. gulp <- odpalamy projekt w trybie nasłuchiwania (gdy zostanie wprowadzona zmiana do plikow w folderze app projekt zrobi rebuilda)
-
-po ostatnim kroku powinna się otworzyć przeglądarka z adresem: "localhost:8080"
+## Pobieranie zmian z chmury (Github)
+>1. git pull <- (ang. pull - ciągnąć) Pobiera nowe zmiany z chmury Githuba.
 
 
+## Uruchamianie projektu
+>1. Uruchamiamy Wiersz poleceń/Terminal/CMD.
+>2. Przechodzimy w Terminalu do lokalizacji naszego projektu (komenda cd).
+>3. npm i <- (i od install) Instaluje wymagane biblioteki z pliku package.json.
+>4. gulp <- Odpala projekt. Jeśli wprowadzimy zmiany, automatycznie się zrestartuje.
 
-## częste problemy 
-
-podczas git push, jeśli ktoś był szybszy od was i wysłał swoje zmiany wcześniej, a wy ich jeszcze nie macie
-rozwiązanie
-podążanie za instrukcjami gita
-
-podczas wykonywania polecenia npm i terminal wywali że nie ma takiego polecenia
-rozwiązanie
-udać się na strone: https://nodejs.org, pobrać i zainstalować
-
-podczas komendy gulp wywali że nie ma takiego polecenia albo inny błąd
-rozwiązanie
-upewnić sie że npm i zostało wykonane jeśli nie zadziała to wykonać komendę npm i -g gulp
+Po ostatnim kroku otworzy się przeglądarka z adresem: "localhost:5343"
 
 
-jeśli te rozwiązania nie pomogły proszę zgłaszać się do Wiktora lub Oskara
+
+## Częste problemy 
+
+Podczas git push, jeśli wysłał swoje zmiany wcześniej, a Wy ich jeszcze nie macie.
+
+Rozwiązanie:
+Podążanie za instrukcjami gita
+
+Podczas wykonywania polecenia *npm i* Terminal twierdzi, że nie ma takiego polecenia.
+Rozwiązanie:
+Udać się na stronę: https://nodejs.org, pobrać i zainstalować.
+
+Podczas komendy *gulp* Terminal twierdzi, że nie ma takiego polecenia, bądź inny błąd.
+Rozwiązanie
+Upewnić się, że *npm i* zostało wykonane. Jeśli nie zadziała, wykonać komendę *npm i -g gulp*.
+
+
+Jeśli te rozwiązania nie pomogą, proszę zgłaszać się do Wiktora lub Oskara.

@@ -80,7 +80,7 @@ const afterStart = () => {
                 browserSync.init(null, {
                     proxy: "http://localhost:8000",
                     files: [path.resolve(__dirname, 'dev/**')],
-                    port: 8080,
+                    port: 5343,
                 });
                 fs.unwatchFile(path.resolve(__dirname, 'dev/client/app.js'))
             })
