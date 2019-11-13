@@ -1,4 +1,5 @@
-'use strict'
+'use strict';
+import Phaser from 'phaser';
 
 /* develblock:start */
 
@@ -10,10 +11,3 @@ import Game from "./js/Game.js";
 
 const game = new Phaser.Game(config);
 console.log(`Only in development`)
-// require('./js/game/game.js')
-
-// const Phaser = require('phaser')
-// const config = require('./config/phaserConfig.js')
-
-
-// const world = new Phaser.Game(config)
