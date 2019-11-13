@@ -1,8 +1,8 @@
 'use strict'
 
 /* develblock:start */
-import config from "js/config/Phaser.js";
-import Game from "js/Game.js";
+import config from "./js/config/Phaser.js";
+import Game from "./js/Game.js";
 
 const game = new Phaser.Game(config);
 console.log(`Only in development`)
