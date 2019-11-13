@@ -1,5 +1,6 @@
 //Plik zawierający konfigurację Phasera
 'use strict';
+import Phaser from 'phaser'
 import Screen from "./Screen.js";
 //Importuje obiekt Screen z pliku Screen.js, w obiekcie tym znajduje się zmienna width i height
 import Game from "./../Game.js";
