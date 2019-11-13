@@ -4,6 +4,7 @@ import Screen from "./Screen.js";
 //Importuje obiekt Screen z pliku Screen.js, w obiekcie tym znajduje się zmienna width i height
 import Game from "./../Game.js";
 //Importuje obiekt Game z pliku Game.js (który znajduje się 2 foldery przed aktualnym)
+import Phaser from 'phaser';
 
 const config = {
     type: Phaser.AUTO,

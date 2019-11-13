@@ -1,5 +1,5 @@
-'use strict'
-
+'use strict';
+import Phaser from 'phaser';
 /* develblock:start */
 import config from "./js/config/Phaser.js";
 import Game from "./js/Game.js";
