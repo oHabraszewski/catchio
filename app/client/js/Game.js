@@ -5,17 +5,17 @@ class Game extends Phaser.Scene {
         super(setup);
     }
 
-    preload :function ()
+    preload()
     {
 
     },
 
-    create: function ()
+    create()
     {
 
     },
 
-    update: function ()
+    update()
     {
 
     }
