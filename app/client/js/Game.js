@@ -6,18 +6,15 @@ class Game extends Phaser.Scene {
         super(setup);
     }
 
-    preload()
-    {
+    preload(){
 
-    },
+    }
 
-    create()
-    {
+    create(){
 
-    },
+    }
 
-    update()
-    {
+    update(){
 
     }
   }

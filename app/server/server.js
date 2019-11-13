@@ -25,7 +25,7 @@ let users = 0
 let index = null
 
 app.use(express.static(path.join(__dirname, '../client/')))
-app.use(express.static(path.join(__dirname, '../assets/')))
+app.use("/assets", express.static(path.join(__dirname, './../assets/')))
 
 log(`server starting`)
 
