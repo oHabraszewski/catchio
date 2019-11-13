@@ -4,7 +4,7 @@
 import config from "js/config/Phaser.js";
 import Game from "js/Game.js";
 
-game = new Phaser.Game(Phaser.config);
+const game = new Phaser.Game(config);
 console.log(`Only in development`)
 
 /* develblock:end */
