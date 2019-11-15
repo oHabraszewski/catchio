@@ -9,6 +9,8 @@ class Game extends Phaser.Scene {
 
     preload(){
           this.load.image('ball', "../../assets/img/ball.png");
+          this.load.image('player0', "../../assets/img/player0.png");
+          this.load.image('player1', "../../assets/img/player1.png");
     }
 
     create(){
