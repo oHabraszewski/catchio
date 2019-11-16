@@ -1,6 +1,6 @@
 //Plik zawierający klasę sceny Game - naszej głównej sceny gry
 import Phaser from 'phaser';
-//import Ball from './Ball.js'; - pozniej sprawdze
+import Ball from './Ball.js'; // pozniej sprawdze
 
 class Game extends Phaser.Scene {
     constructor (setup) {
@@ -14,7 +14,12 @@ class Game extends Phaser.Scene {
     }
 
     create(){
-      this.add.image(400, 300, 'ball'); // test czy działa import obrazka
+      let ball = new Ball(this, 400,300,'ball');
+      //let ball = this.physics.add.sprite(100, 450, 'ball');
+
+      //this.add.image(400, 300, 'ball'); // test czy działa import obrazka
+      this.physics.world.enable(ball);
+      ball.setCollideWorldBounds(true);
     }
 
     update(){
