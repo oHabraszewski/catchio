@@ -2,6 +2,7 @@
 import Phaser from 'phaser';
 import Ball from './Ball.js'; // pozniej sprawdze
 let ball;
+let cursors;
 class Game extends Phaser.Scene {
     constructor (setup) {
         super(setup);
@@ -14,9 +15,6 @@ class Game extends Phaser.Scene {
 
     create(){
       ball = new Ball(this, 400,300,'ball');
-      ball.addphysics(this, ball); // funckja uruchamia fizyke dla obiektu, w nawiasie 1-sza wartosc to scena(tutaj Game)
-                                  // a 2-ga to obiekt, na ktory dzialac ma fizyka. Mozna uzyc dla gracza.
-
     }
 
     update(){
