@@ -1,18 +1,8 @@
-'use strict'
+'use strict';
+import styles from "./scss/index.scss" //Getting styles in scss
+import Phaser from 'phaser';
+import config from "./js/config/Phaser.js";
+import Game from "./js/Game.js";
 
-/* develblock:start */
-import config from "js/config/Phaser.js";
-import Game from "js/Game.js";
-
-game = new Phaser.Game(Phaser.config);
+const game = new Phaser.Game(config);
 console.log(`Only in development`)
-
-/* develblock:end */
-
-// require('./js/game/game.js')
-
-// const Phaser = require('phaser')
-// const config = require('./config/phaserConfig.js')
-
-
-// const world = new Phaser.Game(config)
