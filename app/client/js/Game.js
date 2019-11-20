@@ -16,8 +16,8 @@ class Game extends Phaser.Scene {
 
     create(){
       ball = new Ball(this, 400, 300,'ball');
-      player1 = new Player(this, 1000, 500, 'player0');
-      player2 = new Player(this, 300, 500, 'player1');
+      let player1 = new Player(this, 1000, 500, 'player0');
+      let player2 = new Player(this, 300, 500, 'player1');
     }
 
     update(){
