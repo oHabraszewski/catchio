@@ -1,6 +1,7 @@
 //Plik zawierający klasę sceny Game - naszej głównej sceny gry
 import Phaser from 'phaser';
 import Ball from './Ball.js'; // pozniej sprawdze
+import Player from './Player.js';
 let ball;
 let cursors;
 class Game extends Phaser.Scene {
