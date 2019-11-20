@@ -7,7 +7,7 @@ class Player extends Phaser.GameObjects.Sprite {
     constructor (scene, x, y, texture) {
         super(scene, x, y, texture);
 
-        this._scene = scene;
+        this._cursors  = scene.input.keyboard.createCursorKeys();
         scene.physics.world.enable(this);
         this.body.setCollideWorldBounds(true);
         this.movementSpeed = Screen.width/3;
@@ -15,20 +15,20 @@ class Player extends Phaser.GameObjects.Sprite {
         scene.add.existing(this);
     }
 
-    walk(cursors){
+    walk(){
 
-      if (cursors.left.isDown) {                        //Ruch w lewo
+      if (this._cursors.left.isDown) {                        //Ruch w lewo
         this.body.setVelocityX(-this.movementSpeed);
     }
-    else  if (cursors.right.isDown) {                   //Ruch w prawo
+    else  if (this._cursors.right.isDown) {                   //Ruch w prawo
       this.body.setVelocityX(this.movementSpeed);
-    }
+   }
     else {
       this.body.setVelocityX(0);
    }
-   if (cursors.up.isDown && this.body.blocked.down) {   //Skok
+  if (this._cursors.up.isDown && this.body.blocked.down) {   //Skok
      this.body.setVelocityY(this.jumpSpeed);
-   }
+  }
 
   }
 }
