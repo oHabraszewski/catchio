@@ -3,6 +3,8 @@ import Phaser from 'phaser';
 import Ball from './Ball.js'; // pozniej sprawdze
 import Player from './Player.js';
 let ball;
+let player1;
+let player2;
 let cursors;
 class Game extends Phaser.Scene {
     constructor (setup) {
@@ -16,8 +18,8 @@ class Game extends Phaser.Scene {
 
     create(){
       ball = new Ball(this, 400, 300,'ball');
-      let player1 = new Player(this, 1000, 500, 'player0');
-      let player2 = new Player(this, 300, 500, 'player1');
+      player1 = new Player(this, 1000, 500, 'player0');
+      player2 = new Player(this, 300, 500, 'player1');
     }
 
     update(){
