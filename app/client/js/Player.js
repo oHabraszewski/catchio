@@ -26,7 +26,7 @@ class Player extends Phaser.GameObjects.Sprite {
     else {
       this.body.setVelocityX(0);
    }
-  if (this._cursors.up.isDown && this.body.blocked.down) {   //Skok
+  if (this._cursors.up.isDown && (this.body.blocked.down || this.body.touching.down)) {   //Skok
      this.body.setVelocityY(this.jumpSpeed);
   }
 
