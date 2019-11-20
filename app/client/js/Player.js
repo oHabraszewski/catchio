@@ -2,7 +2,7 @@
 'use strict';
 import Phaser from 'phaser';
 
-class Player extends Phaser.GameObjects.Sprite() {
+class Player extends Phaser.GameObjects.Sprite {
     constructor (scene, x, y, texture) {
         super(scene, x, y, texture);
 
