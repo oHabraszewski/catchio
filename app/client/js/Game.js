@@ -22,13 +22,14 @@ class Game extends Phaser.Scene {
       ball = new Ball(this, 400, 300,'ball');
       player1 = new Player(this, 1000, 500, 'player0');
       player2 = new Player(this, 300, 500, 'player1');
-      overlapCollider = this.physics.add.overlap(ball, player1, ball.moveToPlayer);
+      overlapCollider = this.physics.add.overlap(ball, player1, ball.getOwner);
 
     }
 
     update(){
       player1.walk();
       player2.alternativeWalk();
+      ball.moveToPlayer(ball.owner);
     }
   }
 export default Game;

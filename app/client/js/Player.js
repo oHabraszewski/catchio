@@ -10,8 +10,10 @@ class Player extends Phaser.GameObjects.Sprite {
         this._cursors  = scene.input.keyboard.createCursorKeys();
         scene.physics.world.enable(this);
         this.body.setCollideWorldBounds(true);
-        this.movementSpeed = Screen.width/3;
+        this.acceleration = Screen.width/2;
         this.jumpSpeed = Screen.height/-1;
+        this.body.setMaxVelocity(Screen.width/3, 999);
+        this.body.setDragX(700);
         scene.add.existing(this);
         this.keys = scene.input.keyboard.addKeys('W,S,A,D');
 }
@@ -20,13 +22,13 @@ class Player extends Phaser.GameObjects.Sprite {
     walk(){
 
       if (this._cursors.left.isDown) {                        //Ruch w lewo
-        this.body.setVelocityX(-this.movementSpeed);
+        this.body.setAccelerationX(-this.acceleration);
     }
     else  if (this._cursors.right.isDown) {                   //Ruch w prawo
-      this.body.setVelocityX(this.movementSpeed);
+      this.body.setAccelerationX(this.acceleration);
     }
     else {
-      this.body.setVelocityX(0);
+      this.body.setAccelerationX(0);
     }
     if (this._cursors.up.isDown && (this.body.blocked.down || this.body.touching.down)) {   //Skok
       this.body.setVelocityY(this.jumpSpeed);
@@ -35,13 +37,13 @@ class Player extends Phaser.GameObjects.Sprite {
   }
     alternativeWalk(){
       if (this.keys.A.isDown) {                        //Ruch w lewo
-        this.body.setVelocityX(-this.movementSpeed);
+        this.body.setAccelerationX(-this.acceleration);
     }
     else  if (this.keys.D.isDown) {                   //Ruch w prawo
-      this.body.setVelocityX(this.movementSpeed);
+      this.body.setAccelerationX(this.acceleration);
     }
     else {
-      this.body.setVelocityX(0);
+      this.body.setAccelerationX(0);
     }
     if (this.keys.W.isDown && (this.body.blocked.down || this.body.touching.down)) {   //Skok
       this.body.setVelocityY(this.jumpSpeed);
@@ -51,13 +53,13 @@ class Player extends Phaser.GameObjects.Sprite {
 }
 
 /*if (this._cursors.left.isDown || this.keys.A.isDown) {                        //Ruch w lewo
-  this.body.setVelocityX(-this.movementSpeed);
+  this.body.setAccelerationX(-this.acceleration);
 }
 else  if (this._cursors.right.isDown || this.keys.D.isDown) {                   //Ruch w prawo
-this.body.setVelocityX(this.movementSpeed);
+this.body.setAccelerationX(this.acceleration);
 }
 else {
-this.body.setVelocityX(0);
+this.body.setAccelerationX(0);
 }
 if ((this._cursors.up.isDown || this.keys.W.isDown) && (this.body.blocked.down || this.body.touching.down)) {   //Skok
 this.body.setVelocityY(this.jumpSpeed);

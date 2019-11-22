@@ -9,16 +9,19 @@ class Ball extends Phaser.GameObjects.Sprite {
         scene.physics.world.enable(this);
         this.body.setDragX(300);
         this.body.setCollideWorldBounds(true);
+        this.owner;
         scene.add.existing(this);
-        this.check;
-        this.followedPlayer;
-        this.triggered;
     }
 
-    moveToPlayer(ball, player){
-        ball.x = player.x;
-        ball.y = player.y;
-
+    getOwner(ball, player){
+      ball.owner = player;
+    }
+    moveToPlayer(){
+      if (this.owner != null){
+        this.x = this.owner.x;
+        this.y = this.owner.y;
       }
+      console.log(this.owner);
+    }
 }
 export default Ball;
