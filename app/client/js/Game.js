@@ -6,6 +6,8 @@ let ball;
 let player1;
 let player2;
 let cursors;
+let overlapCollider;
+let overlapTriggered = false;
 class Game extends Phaser.Scene {
     constructor (setup) {
         super(setup);
@@ -20,12 +22,13 @@ class Game extends Phaser.Scene {
       ball = new Ball(this, 400, 300,'ball');
       player1 = new Player(this, 1000, 500, 'player0');
       player2 = new Player(this, 300, 500, 'player1');
-      this.physics.add.collider(player1, ball); // test kolizji i skakania po obiektach (do usunięcia)
+      overlapCollider = this.physics.add.overlap(ball, player1, ball.moveToPlayer);
 
     }
 
     update(){
       player1.walk();
+      player2.alternativeWalk();
     }
   }
 export default Game;

@@ -19,16 +19,16 @@ class Player extends Phaser.GameObjects.Sprite {
 
     walk(){
 
-      if (this._cursors.left.isDown || this.keys.A.isDown) {                        //Ruch w lewo
+      if (this._cursors.left.isDown) {                        //Ruch w lewo
         this.body.setVelocityX(-this.movementSpeed);
     }
-    else  if (this._cursors.right.isDown || this.keys.D.isDown) {                   //Ruch w prawo
+    else  if (this._cursors.right.isDown) {                   //Ruch w prawo
       this.body.setVelocityX(this.movementSpeed);
     }
     else {
       this.body.setVelocityX(0);
     }
-    if ((this._cursors.up.isDown || this.keys.W.isDown) && (this.body.blocked.down || this.body.touching.down)) {   //Skok
+    if (this._cursors.up.isDown && (this.body.blocked.down || this.body.touching.down)) {   //Skok
       this.body.setVelocityY(this.jumpSpeed);
     }
 
