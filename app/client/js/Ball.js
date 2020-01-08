@@ -21,7 +21,9 @@ class Ball extends Phaser.GameObjects.Sprite {
         this.x = this.owner.x;
         this.y = this.owner.y;
       }
-      console.log(this.owner);
+    }
+    removeOwner(){
+      this.owner = null;
     }
 }
 export default Ball;

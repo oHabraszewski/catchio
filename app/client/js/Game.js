@@ -7,6 +7,7 @@ let player1;
 let player2;
 let cursors;
 let overlapCollider;
+let overlapCollider2;
 let overlapTriggered = false;
 class Game extends Phaser.Scene {
     constructor (setup) {
@@ -23,6 +24,7 @@ class Game extends Phaser.Scene {
       player1 = new Player(this, 1000, 500, 'player0');
       player2 = new Player(this, 300, 500, 'player1');
       overlapCollider = this.physics.add.overlap(ball, player1, ball.getOwner);
+      overlapCollider2 = this.physics.add.overlap(ball, player2, ball.getOwner);
 
     }
 
