@@ -3,7 +3,7 @@
  <tileset firstgid="1" name="tilesets project" tilewidth="40" tileheight="40" tilecount="6" columns="3">
   <image source="tiles.png" width="120" height="80"/>
  </tileset>
- <tileset firstgid="7" source="collisions.png"/>
+ <tileset firstgid="7" source="collisions.tsx"/>
  <layer id="2" name="CollisionLayer" width="48" height="27">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
