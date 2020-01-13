@@ -1,7 +1,7 @@
 //Plik zawierający ogólną klasę gracza
 'use strict';
 import Phaser from 'phaser';
-import Screen from "./config/Screen.js";
+import {Screen} from "./config/Screen.js";
 
 class Player extends Phaser.GameObjects.Sprite {
     constructor (scene, x, y, texture) {
@@ -11,9 +11,9 @@ class Player extends Phaser.GameObjects.Sprite {
         scene.physics.world.enable(this);
         this.body.setCollideWorldBounds(true);
         this.acceleration = Screen.width/2;
-        this.jumpSpeed = Screen.height/-1;
-        this.body.setMaxVelocity(Screen.width/3, 999);
-        this.body.setDragX(700);
+        this.jumpSpeed = -Screen.height;
+        this.body.setMaxVelocity(Screen.width/5, 2000);
+        this.body.setDragX(1000);
         scene.add.existing(this);
         this.keys = scene.input.keyboard.addKeys('W,S,A,D');
 }
