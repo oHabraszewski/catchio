@@ -1,0 +1,9 @@
+gulp is NOT deletig blocks:
+
+    dev:start -> only on local dev build
+    prod:start -> in all production builds/publishs     
+
+    server:start -> only on server build/publishs
+
+gulp is deletig blocks:
+    notServer:start -> only on server build/publishs
