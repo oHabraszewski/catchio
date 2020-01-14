@@ -8,6 +8,7 @@ class Player extends Phaser.GameObjects.Sprite {
   constructor(scene, x, y, texture) {
     super(scene, x, y, texture);
 
+    this.ball = null
     this.jumpSpeed = -Screen.height;
     this.acceleration = Screen.width / 2;
 
@@ -60,7 +61,16 @@ class Player extends Phaser.GameObjects.Sprite {
   }
 
   static getBall(player1, player2) {
-    console.log(player1, player2)
+    // player1 is player with ball
+    if (player1.ball == null && player2.ball == null) return
+    if (player1.ball == null) {
+      const temp = player1
+      player1 = player2
+      player2 = temp
+    }
+
+    // swap the ball based on keys
+    // console.log(player1.ball == null)
   }
 }
 

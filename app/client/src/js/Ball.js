@@ -5,12 +5,12 @@ class Ball extends Phaser.GameObjects.Sprite {
   constructor(scene, x, y, texture) {
     super(scene, x, y, texture);
     this.owner = null;
-    
+
     scene.add.existing(this);
     scene.physics.world.enable(this);
 
     this.body.setDragX(300);
-    this.body.setCollideWorldBounds(true);    
+    this.body.setCollideWorldBounds(true);
   }
 
   moveToPlayer() {
@@ -21,12 +21,14 @@ class Ball extends Phaser.GameObjects.Sprite {
     }
   }
   removeOwner() {
+    this.owner.ball = null
     this.owner = null;
   }
 
   static setOwner(ball, player) {
-    if(ball.owner == null) {
+    if (ball.owner == null) {
       ball.owner = player;
+      player.ball = ball
     }
   }
 }
