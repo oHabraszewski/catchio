@@ -24,8 +24,8 @@ class Game extends Phaser.Scene {
 
     this.load.image('ball', "/assets/img/ball.png");
 
-    this.load.image('playerWASD', "/assets/img/red/player.png");
-    this.load.image('playerArrows', "/assets/img/blue/player.png");
+    this.load.image('playerWASD', "/assets/img/red/PinkyWinky.png");
+    this.load.image('playerArrows', "/assets/img/blue/BlueBlue.png");
   }
   start(){
     this.scene.resume()
