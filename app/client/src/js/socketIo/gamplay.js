@@ -6,7 +6,6 @@ export default function () {
     })
 
     this.socket.on('newBallOwner', () => {
-        console.log(`newBallOwner`)
         const ball = this.player.ball
         this.otherPlayer.ball = ball
         ball.owner = this.otherPlayer

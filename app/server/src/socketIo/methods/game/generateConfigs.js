@@ -1,7 +1,7 @@
 const randomArrayElement = require('../../../utils/randomArrayElement')
 const data = require('../../data')
 
-module.exports = (room) => {
+module.exports = (room, changePlayers = true) => {
     const configs = {
         // map: randomArrayElement(data.const.GENERATE_CONFIGS_CONFIGS.maps)
         map: data.const.GENERATE_CONFIGS_CONFIGS.maps[0]
@@ -10,12 +10,21 @@ module.exports = (room) => {
     const spritesIds = [...data.const.GENERATE_CONFIGS_CONFIGS.sprites]
     if (0.5 > Math.random()) spritesIds.reverse()
 
-    const sprites = {}
-    let i = 0
-    for (const playerId in room.players) {
-        sprites[playerId] = spritesIds[i]
-        i++
+    let sprites = {}
+    if (changePlayers) {
+        let i = 0
+        for (const playerId in room.players) {
+            sprites[playerId] = spritesIds[i]
+            room.players[playerId].sprite = spritesIds[i]
+            i++
+        }
+    } else {
+        for (const playerId in room.players) {
+            sprites[playerId] = room.players[playerId].sprite
+        }
     }
+
+
 
     configs.sprites = sprites
     return configs

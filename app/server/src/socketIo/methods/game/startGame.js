@@ -3,7 +3,7 @@ const generateConfigs = require('./generateConfigs')
 
 module.exports = (room) => {
     if (room.playersCount == data.const.MIN_PLAYERS_IN_ROOM_TO_START_GAME) {
-        room.emit('startGame', generateConfigs(room))
+        startGame(room)
 
         room.on('newPos', (newPos, player) => {
             if (player.socket != undefined) {
@@ -17,6 +17,23 @@ module.exports = (room) => {
             }
         })
 
+        let restartEvent = true
+        room.on('restart', (player) => {
+            if (restartEvent && room.gameplay) {
+                restartEvent = false
+                room.gameplay = false
+                player.score++
+                startGame(room, false)
+                setTimeout(() => { restartEvent = true }, 4000);
+            }
+        })
+
     }
 }
 
+
+
+function startGame(room, changePlayers) {
+    room.emit('startGame', generateConfigs(room, changePlayers))
+    room.gameplay = true
+}

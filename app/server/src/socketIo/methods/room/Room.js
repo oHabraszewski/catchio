@@ -3,6 +3,7 @@ class Room {
         this.players = {}
         this.playersCount = 0
 
+        this.gameplay = false
         this.events = {}
     }
 

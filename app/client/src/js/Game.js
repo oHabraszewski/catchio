@@ -9,6 +9,12 @@ import defaultConfig from './config/default'
 import { updatePos } from './socketIo/update'
 
 
+let canShotL = true
+let canShotR = true
+
+let shotRTimeout = null
+let shotLTimeout = null
+
 class Game extends Phaser.Scene {
   constructor(setup) {
     super(setup);
@@ -61,6 +67,8 @@ class Game extends Phaser.Scene {
   }
 
   start(gameConfig) {
+    if (shotLTimeout != null) clearTimeout(shotLTimeout)
+    if (shotRTimeout != null) clearTimeout(shotRTimeout)
     this.resetForGamplay(gameConfig)
     this.scene.resume()
     this.gameplay = true
@@ -82,25 +90,27 @@ class Game extends Phaser.Scene {
     const tileset = map.addTilesetImage("tiles");
     const layer = map.createStaticLayer(0, tileset, 0, 0);
     layer.setScale(Scale, Scale)
-    layer.setCollision([3,0])
-    layer.setTileIndexCallback(5, (object, obj)=>{
-      if(canShotL && object == this.ents.ball){
+    layer.setCollision([3, 0])
+
+    layer.setTileIndexCallback(5, (object, obj) => {
+      if (canShotL && object == this.ents.ball) {
         canShotL = false;
-        setTimeout(()=>{
+        shotLTimeout = setTimeout(() => {
           this.stop()
-          this.start()
-        },500)
-        setTimeout(()=>{canShotL = true},5000)
+          this.socket.emit('restart')
+        }, 500)
+        setTimeout(() => { canShotL = true }, 5000)
       }
     })
-    layer.setTileIndexCallback(2, (object, obj)=>{
-      if(canShotR && object == this.ents.ball){
+
+    layer.setTileIndexCallback(2, (object, obj) => {
+      if (canShotR && object == this.ents.ball) {
         canShotR = false;
-        setTimeout(()=>{
+        shotRTimeout = setTimeout(() => {
           this.stop()
-          this.start()
-        },500)
-        setTimeout(()=>{canShotR = true},5000)
+          this.socket.emit('restart')
+        }, 500)
+        setTimeout(() => { canShotR = true }, 5000)
       }
     })
 

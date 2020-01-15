@@ -8,13 +8,14 @@ export default function () {
     })
 
     socket.on('startGame', (gameConfig) => {
-        console.log(`start game: `, gameConfig)
+        // console.log(`start game: `, gameConfig)
+        if(this.gameplay) this.stop()
         this.start(gameConfig)
     })
 
     socket.on('stopGame', () => {
-        this.stop()
         console.log(`stop game`)
+        this.stop()
     })  
 
     gamplay.call(this)
