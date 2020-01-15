@@ -3,6 +3,10 @@ import Phaser from 'phaser';
 import Ball from './Ball'; // pozniej sprawdze
 import Player from './Player';
 import { Canvas, Scale } from "./config/Screen";
+
+let canShotL = true,
+    canShotR = true;
+
 const config = {//Potem przesyłany przez serwer
   startPosition: {
     x:160,
@@ -22,15 +26,12 @@ class Game extends Phaser.Scene {
     this.load.tilemapCSV("map", "/assets/img/map/map.csv");
     this.load.image("tiles", "/assets/img/map/tiles.png");
 
-    this.load.image('ball', "/assets/img/ball.png");
+    this.load.image('ball', "/assets/img/bol.png");
 
     this.load.image('playerWASD', "/assets/img/red/PinkyWinky.png");
     this.load.image('playerArrows', "/assets/img/blue/BlueBlue.png");
   }
   start(){
-    this.scene.resume()
-  }
-  stop(){
     this.ents.playerWASD.setPosition(config.startPosition.x * Scale, config.startPosition.y * Scale)
     this.ents.playerWASD.ball = null
 
@@ -39,7 +40,9 @@ class Game extends Phaser.Scene {
 
     this.ents.ball.setPosition(Canvas.width / 2, config.ballY * Scale)
     this.ents.ball.owner = null
-
+    setTimeout(()=>{this.scene.resume()}, 3000)
+  }
+  stop(){
     this.scene.pause()
   }
   create() {
@@ -53,6 +56,26 @@ class Game extends Phaser.Scene {
     const layer = map.createStaticLayer(0, tileset,0,0);
     layer.setScale(Scale, Scale)
     layer.setCollision([3,0])
+    layer.setTileIndexCallback(5, (object, obj)=>{
+      if(canShotL && object == this.ents.ball){
+        canShotL = false;
+        setTimeout(()=>{
+          this.stop()
+          this.start()
+        },500)
+        setTimeout(()=>{canShotL = true},5000)
+      }
+    })
+    layer.setTileIndexCallback(2, (object, obj)=>{
+      if(canShotR && object == this.ents.ball){
+        canShotR = false;
+        setTimeout(()=>{
+          this.stop()
+          this.start()
+        },500)
+        setTimeout(()=>{canShotR = true},5000)
+      }
+    })
 
     this.ents.ball = new Ball(this, Canvas.width / 2, config.ballY * Scale, 'ball');
     this.ents.ball.setScale(Scale*1.5)
@@ -71,9 +94,6 @@ class Game extends Phaser.Scene {
 
     this.ents.startOverlap = this.physics.add.overlap(this.ents.ball, this.ents.playerWASD, setOwn);
     this.ents.startOverlap2 = this.physics.add.overlap(this.ents.ball, this.ents.playerArrows, setOwn);
-    setTimeout(()=>{console.log(this);this.stop()}, 5000)
-    setTimeout(()=>{console.log(this);this.start()}, 10000)
-    //this.physics.add.overlap(this.ents.playerWASD, this.ents.playerArrows, Player.getBall);
   }
 
   update() {
