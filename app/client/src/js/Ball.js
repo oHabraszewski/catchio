@@ -35,8 +35,7 @@ class Ball extends Phaser.GameObjects.Sprite {
             player.ball = ball
             ball.owner = player
         } else {
-            if (canGet && player.ball != ball) {
-
+            if (canGet && player.ball != ball && (player.keys.S.isDown || player.cursors.down.isDown)) {
                 if (player1.ball == null) { //Player 1 ma piłkę, Player 2 ni ma piłki
                     const temp = player1
                     player1 = player2

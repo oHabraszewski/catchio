@@ -20,6 +20,7 @@ class Player extends Phaser.GameObjects.Sprite {
     this.body.setDragX(1000);
 
     this.cursors = scene.input.keyboard.createCursorKeys();
+    this.keys = scene.input.keyboard.addKeys('W,S,A,D');
   }
 
   setHuman(flag) {
