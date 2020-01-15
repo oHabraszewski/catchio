@@ -8,31 +8,31 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 module.exports = {
 
 
-    // "babel": {
-    //     test: /\.m?js$/i,
-    //     exclude: [
-    //         /node_modules\/webpack|html-webpack-plugin\//,
-    //         /node_modules\/core-js(\/|).*/
-    //     ],
-    //     use: {
-    //         loader: 'babel-loader',
-    //         options: {
-    //             "presets": [
-    //                 [
-    //                     "@babel/preset-env",
-    //                     {
-    //                         "useBuiltIns": "usage",
-    //                         "corejs": 3,
-    //                     }
-    //                 ],
-    //             ],
-    //             sourceType: 'unambiguous',
-    //             "plugins": [
-    //                 "object-to-json-parse"
-    //             ]
-    //         }
-    //     }
-    // },
+    "babel": {
+        test: /\.m?js$/i,
+        exclude: [
+            /node_modules\/webpack|html-webpack-plugin\//,
+            /node_modules\/core-js(\/|).*/
+        ],
+        use: {
+            loader: 'babel-loader',
+            options: {
+                "presets": [
+                    [
+                        "@babel/preset-env",
+                        {
+                            "useBuiltIns": "usage",
+                            "corejs": 3,
+                        }
+                    ],
+                ],
+                sourceType: 'unambiguous',
+                "plugins": [
+                    "object-to-json-parse"
+                ]
+            }
+        }
+    },
 
     "scss": {
         test: /\.s[ac]ss|\.css$/i,

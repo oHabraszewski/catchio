@@ -3,6 +3,7 @@
 const fs = require('fs')
 const path = require('path')
 const spawn = require('child_process').spawn
+const os = require('os')
 
 const gulp = require('gulp')
 
@@ -84,7 +85,9 @@ function restartServerProcess() {
     }
 
     try {
-        serverProcess = spawn(`SET PORT=${env.port} && node ${path.join(__dirname, `${env.mode == 'prod' ? 'dist' : 'dev'}/server/index.js`)}`, { shell: true })
+        const command = os.platform() == 'win32' ? `SET PORT=${env.port} && node ${path.join(__dirname, `${env.mode == 'prod' ? 'dist' : 'dev'}/server/index.js`)}`
+            : `PORT=${env.port} node ${path.join(__dirname, `${env.mode == 'prod' ? 'dist' : 'dev'}/server/index.js`)}`
+        serverProcess = spawn(command, { shell: true })
     } catch (e) {
         serverGood = false
         serverError = e
