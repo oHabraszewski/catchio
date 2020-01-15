@@ -1,6 +1,6 @@
 //Plik zawierający ogólną klasę gracza
 import Phaser from 'phaser';
-import { Screen } from "./config/Screen";
+import { Canvas, Scale } from "./config/Screen";
 
 
 
@@ -9,14 +9,14 @@ class Player extends Phaser.GameObjects.Sprite {
     super(scene, x, y, texture);
 
     this.ball = null
-    this.jumpSpeed = -Screen.height;
-    this.acceleration = Screen.width / 2;
+    this.jumpSpeed = -Canvas.height;
+    this.acceleration = Canvas.width / 2;
 
     scene.add.existing(this);
     scene.physics.world.enable(this);
 
     this.body.setCollideWorldBounds(true);
-    this.body.setMaxVelocity(Screen.width / 5, 2000);
+    this.body.setMaxVelocity(Canvas.width / 5, 2000);
     this.body.setDragX(1000);
 
     this.cursors = scene.input.keyboard.createCursorKeys();

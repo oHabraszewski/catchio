@@ -2,12 +2,20 @@
 import Phaser from 'phaser';
 import Ball from './Ball'; // pozniej sprawdze
 import Player from './Player';
-import { Screen, Scale } from "./config/Screen";
-
+import { Canvas, Scale } from "./config/Screen";
+const config = {//Potem przesyłany przez serwer
+  startPosition: {
+    x:160,
+    y:500
+  },
+  ballY: 400
+}
 class Game extends Phaser.Scene {
   constructor(setup) {
     super(setup);
     this.ents = {}
+    this.stop = this.stop.bind(this) //Kto pamięta Reacta?
+    this.start = this.start.bind(this)
   }
 
   preload() {
@@ -18,11 +26,22 @@ class Game extends Phaser.Scene {
 
     this.load.image('playerWASD', "/assets/img/red/player.png");
     this.load.image('playerArrows', "/assets/img/blue/player.png");
-
-    //this.load.image("mapIMG", "/assets/img/map/tiles.png")
-    //this.load.tilemapTiledJSON("map", "/assets/img/map/map1.json");
   }
+  start(){
+    this.scene.resume()
+  }
+  stop(){
+    this.ents.playerWASD.setPosition(config.startPosition.x * Scale, config.startPosition.y * Scale)
+    this.ents.playerWASD.ball = null
 
+    this.ents.playerArrows.setPosition(Canvas.width - config.startPosition.x * Scale, config.startPosition.y * Scale)
+    this.ents.playerArrows.ball = null
+
+    this.ents.ball.setPosition(Canvas.width / 2, config.ballY * Scale)
+    this.ents.ball.owner = null
+
+    this.scene.pause()
+  }
   create() {
     //Konfiguracja canvasa
     const canvas = document.getElementsByTagName('canvas')[0]
@@ -35,14 +54,14 @@ class Game extends Phaser.Scene {
     layer.setScale(Scale, Scale)
     layer.setCollision([3,0])
 
-    this.ents.ball = new Ball(this, 400, 300, 'ball');
+    this.ents.ball = new Ball(this, Canvas.width / 2, config.ballY * Scale, 'ball');
     this.ents.ball.setScale(Scale*1.5)
     const setOwn = Ball.setOwner.bind(this)
 
-    this.ents.playerWASD = new Player(this, 1000, 500, 'playerWASD');
+    this.ents.playerWASD = new Player(this, config.startPosition.x * Scale, config.startPosition.y * Scale, 'playerWASD');
     this.ents.playerWASD.setScale(Scale)
 
-    this.ents.playerArrows = new Player(this, 300, 500, 'playerArrows');
+    this.ents.playerArrows = new Player(this, Canvas.width - config.startPosition.x * Scale, config.startPosition.y * Scale, 'playerArrows');
     this.ents.playerArrows.setScale(Scale)
     
 
@@ -52,7 +71,8 @@ class Game extends Phaser.Scene {
 
     this.ents.startOverlap = this.physics.add.overlap(this.ents.ball, this.ents.playerWASD, setOwn);
     this.ents.startOverlap2 = this.physics.add.overlap(this.ents.ball, this.ents.playerArrows, setOwn);
-
+    setTimeout(()=>{console.log(this);this.stop()}, 5000)
+    setTimeout(()=>{console.log(this);this.start()}, 10000)
     //this.physics.add.overlap(this.ents.playerWASD, this.ents.playerArrows, Player.getBall);
   }
 
@@ -61,6 +81,9 @@ class Game extends Phaser.Scene {
 
     this.ents.playerArrows.walk();
     this.ents.playerWASD.alternativeWalk();
+  }
+  resize(){
+    console.log("Zmieniono  wielkość")
   }
 }
 

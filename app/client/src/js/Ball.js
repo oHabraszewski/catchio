@@ -24,6 +24,8 @@ class Ball extends Phaser.GameObjects.Sprite {
     }
 
     static setOwner(ball, player) {
+        //this.scene.pause() Mini test
+        //setTimeout(()=>{console.log(this);this.scene.resume("default")}, 500)
         let canGet = true;
         let player1 = this.ents.playerWASD
         let player2 = this.ents.playerArrows
