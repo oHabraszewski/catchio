@@ -4,9 +4,14 @@ import Ball from './Ball'; // pozniej sprawdze
 import Player from './Player';
 import { Screen, Scale } from "./config/Screen";
 
+import connection from './socketIo/connection'
+
 let ball;
 let player1;
 let player2;
+
+const socket = io(/* dev:start */ 'localhost:8000' /* dev:end */)
+connection.connect(socket)
 
 class Game extends Phaser.Scene {
   constructor(setup) {
@@ -26,6 +31,8 @@ class Game extends Phaser.Scene {
   }
 
   create() {
+
+
     const map = this.make.tilemap({ key: "map", tileWidth: 40, tileHeight: 40 });
     const tileset = map.addTilesetImage("tiles");
 
@@ -35,26 +42,26 @@ class Game extends Phaser.Scene {
     mapLayer.setCollision([3, 0])
 
     ball = new Ball(this, 400, 300, 'ball');
-    player1 = new Player(this, 1000, 500, 'player1');
-    player2 = new Player(this, 300, 500, 'player2');
+    player1 = new Player(this, 300, 500, 'player1');
+    // player2 = new Player(this, 1000, 500, 'player2');
 
     // coś u mnie nie działa (Wiktor)
     this.physics.add.collider(player1, mapLayer);
-    this.physics.add.collider(player2, mapLayer);
+    // this.physics.add.collider(player2, mapLayer);
     
     this.physics.add.collider(ball, mapLayer);
 
     this.physics.add.overlap(ball, player1, Ball.setOwner);
-    this.physics.add.overlap(ball, player2, Ball.setOwner);
+    // this.physics.add.overlap(ball, player2, Ball.setOwner);
 
-    this.physics.add.overlap(player1, player2, Player.getBall);
+    // this.physics.add.overlap(player1, player2, Player.getBall);
   }
 
   update() {
     ball.moveToPlayer();
 
     player1.walk();
-    player2.alternativeWalk();
+    // player2.alternativeWalk();
   }
 }
 
