@@ -17,10 +17,11 @@ class Ball extends Phaser.GameObjects.Sprite {
       ball.owner = player;
     }
     moveToPlayer(){
-      if (this.owner != null){
+      this.startFollow(this.owner)
+      /* if (this.owner != null){
         this.x = this.owner.x;
         this.y = this.owner.y;
-      }
+      } */
     }
     removeOwner(){
       this.owner = null;
