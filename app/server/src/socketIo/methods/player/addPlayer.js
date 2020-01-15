@@ -3,6 +3,7 @@ module.exports = (socket, room) => {
     
     socket.room = room
     room.players[socket.id] = {
+        socket,
         ghost: true
     }
 }

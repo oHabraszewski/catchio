@@ -1,4 +1,4 @@
-const addRoom = require('.//addRoom')
+const addRoom = require('./addRoom')
 const removeRoom = require('./removeRoom')
 
 const data = require('../../data')

@@ -2,6 +2,8 @@ const goodNumberOfRooms = require('./room/goodNumberOfRooms')
 const addRoom = require('./room/addRoom'); addRoom() // add first room
 const addPlayer = require('./player/addPlayer')
 
+const startGame = require('./game/startGame')
+
 const data = require('../data')
 
 
@@ -9,8 +11,9 @@ const data = require('../data')
 module.exports = (socket) => {
     goodNumberOfRooms()
     const playersRoom = findPlayersRoom()
+    
     addPlayer(socket, playersRoom)
-
+    startGame(playersRoom) // if can start game
     console.log(data.rooms)
 }
 

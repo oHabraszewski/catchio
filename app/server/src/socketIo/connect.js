@@ -1,6 +1,6 @@
-const checkGhost = require('./utils/player/checkGhost')
-const addPlayer = require('./utils/addPlayer')
-const removePlayer = require('./utils/removePlayer')
+const checkGhost = require('./methods/player/checkGhost')
+const addPlayer = require('./methods/addPlayer')
+const removePlayer = require('./methods/removePlayer')
 
 module.exports = (socket) => {
     addPlayer(socket)

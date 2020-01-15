@@ -1,0 +1,1 @@
+module.exports = (array, offset = 0) => array[Math.floor((Math.random() * (array.length - offset)) + offset)]
