@@ -1,343 +1,420 @@
-// --delelte-heroku-etc.
+/* import:start */
 
-// heroku == delete on heroku publish
-// start == delete on production build 
-
-const path = require('path')
 const fs = require('fs')
+const path = require('path')
 const spawn = require('child_process').spawn
 
 const gulp = require('gulp')
 
 const webpackStream = require('webpack-stream');
-const imagemin = require('gulp-imagemin');
-const clean = require('gulp-clean');
+
 const browserSync = require('browser-sync');
-const nodemon = require('gulp-nodemon');
-const minify = require('gulp-minify');
+
+const imagemin = require('gulp-imagemin');
 const prettyData = require('gulp-pretty-data');
+const minify = require('gulp-minify');
 
-const gitConfig = require('./config/gitConfing.js')
-const utls = require('./config/gulp/utils.js')
+const del = require('del')
+// executed 
+require('./config/util/gulp/clean.js')(__dirname) // define "util:clean:dev" && "util:clean:prod"
 
-let devs = ['heroku', 'start']
+// to execute
+const webpackRunner = require('./config/webpack/runner.js')
 
-let onPublishDevWeb = false
+const { makeStripBlocks, gulpDeleteStripBlocks } = require('./config/util/gulp/stripBlocks.js')
 
-let webpackClient = false
-let webpackServer = false
+const gulpNext = require('./config/util/gulp/nextGulp.js')
 
-let webpackClientStream = undefined
-let webpackServerStream = undefined
+const goodNames = require('./config/util/gulp/goodNames.js')
 
-let finishPublishDev = undefined
+const browserSyncClientHtml = require('./config/util/gulp/browserSyncClientHtml.js')
 
-let afterStartCout = 0
-
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
+const gulpPromise = require('./config/util/gulp/promisifyGulp.js')
+/* import:end */
+ 
 
 
-const publishDev = () => {
-    webpackClientStream.pause()
+ 
+// for other templates:
+let afterWebpackEmit = []
+let afterSetEnv = []
+let afterMainFolderMakup = [] // dist or dev folder
 
-    moreArgvString = ''
-    for (let arg of process.argv) {
-        arg = arg.split('-')
-        let found = false
-        for (let temp of arg) {
-            if (temp == 'delete') {
-                found = true
-            }
-        }
-        if (found) {
-            moreArgvString = arg
-        }
-    }
 
-    const otherProcess = spawn(`gulp publishDev --b_u_i_l_d__d_o_n_e ${moreArgvString}`, {
-        shell: true
-    })
 
-    otherProcess.stderr.pipe(process.stdout)
-    otherProcess.stdout.pipe(process.stdout)
+let userAddons = []
+let excludeRules = []
+// end
 
-    otherProcess.on('close', () => finishPublishDev())
+
+
+
+let env = {
+    port: 8000,
+    config: 'normal',
+
+    mode: null,
+    watch: null,
+    stripBlocks: null,
+    packge: false,
+
+    browser: true,
+    command: null
 }
 
-const afterStart = () => {
+// ------------------------------------------------------------------------
+
+let browserSyncProcess = {
+    reload: () => { }
+}
+
+let serverProcess = null
+let serverGood = false
+let serverError = null
+
+
+// ------------------------------------------------------------------------
+
+function restartServerProcess() {
+    let firstStartupDone = false
+
+    if (serverProcess != null) {
+        serverProcess.removeAllListeners()
+        serverProcess.kill("SIGQUIT")
+    }
+
+    try {
+        serverProcess = spawn(`SET PORT=${env.port} && node ${path.join(__dirname, `${env.mode == 'prod' ? 'dist' : 'dev'}/server/index.js`)}`, { shell: true })
+    } catch (e) {
+        serverGood = false
+        serverError = e
+        console.log(`[server error]\n\n${e.toString()}\n\n[server error]`)
+        browserSyncProcess.reload()
+    }
+
+
+    serverProcess.stdout.on('data', (data) => {
+        serverGood = true
+        console.log(`[server] ${data.toString()}`)
+
+        if (!firstStartupDone && data.toString().includes(env.port)) {
+            browserSyncProcess.reload()
+            firstStartupDone = true
+        }
+    })
+
+    serverProcess.stderr.on('data', (data) => {
+        serverGood = false
+        serverError = data
+        console.log(`[server error]\n\n${data.toString()}\n\n[server error]`)
+        browserSyncProcess.reload()
+    })
+}
+
+// ------------------------------------------------------------------------
+
+let afterStartCout = 0 // when webpack, assets and server finisches first "round" then fire server
+function afterStart() {
     afterStartCout++
-    if (afterStartCout == 2) {
-        if (onPublishDevWeb) {
-            publishDev()
-        } else {
-            nodemon({
-                watch: [path.resolve(__dirname, 'dev/server/**')],
-                script: path.resolve(__dirname, 'dev/server/app.js'),
-            })
-            fs.watchFile(path.resolve(__dirname, 'dev/client/app.js'), () => {
-                browserSync.init(null, {
-                    proxy: "http://localhost:8000",
-                    files: [path.resolve(__dirname, 'dev/**')],
-                    port: 5343,
-                });
-                fs.unwatchFile(path.resolve(__dirname, 'dev/client/app.js'))
-            })
-        }
+    if (afterStartCout == 3 && env.watch) { // run browserSync + nodemon == run server
+        if (env.browser)
+            gulp.series('methods:browser:startup', 'methods:server:startup')()
+        else
+            gulp.series('methods:server:startup')()
     }
 }
 
-const checkDevs = (done) => {
-    for (let arg of process.argv) {
-        arg = arg.split('-')
-        let found = false
-        for (let temp of arg) {
-            if (temp == 'delete') {
-                found = true
-            }
-        }
-        if (found) {
-            let Tdevs = []
-            let not = []
-            for (let temp of arg) {
-                if (temp != '' && temp != 'delete') {
-                    if (temp == 'start' || temp == 'heroku') {
-                        Tdevs.push(temp)
-                    } else
-                        not.push(temp)
-                }
-            }
-            for (const key of devs) {
-                if (key != 'start' && key != 'heroku') {
-                    let f = true
-                    for (const key2 of not) {
-                        if (key2 == key) {
-                            f = false
-                            break
-                        }
-                    }
-                    if (f) Tdevs.push(key)
-                }
-            }
-            devs = Tdevs
-            return
-        }
-    }
-    if (done) done()
-}
 
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
 
-gulp.task('clean', () => {
-    return gulp.src('dev', {
-        read: false,
-        allowEmpty: true
-    })
-        .pipe(clean());
-});
-
-gulp.task('assets', () => {
-    return gulp.src(path.resolve(__dirname, 'app/assets/**'))
-        .pipe(imagemin())
-        .pipe(gulp.dest(path.resolve(__dirname, 'dev/assets')))
-})
-
-gulp.task('webpackClient', () => {
-    webpackClientStream = gulp.src(path.resolve(__dirname, 'app/client/**'))
-        .pipe(webpackStream(onPublishDevWeb ? require(path.resolve(__dirname, 'config/client/webpack.dev.js'))(['heroku']) : require(path.resolve(__dirname, 'config/client/webpack.dev.js'))(devs)));
-    webpackClientStream.pipe(gulp.dest(path.resolve(__dirname, 'dev/client/')))
-        .on('data', () => {
-            if (!webpackClient) {
-                afterStart()
-                webpackClient = true
-            }
-        })
-    return webpackClientStream
-})
-
-gulp.task('webpackServer', () => {
-    webpackServerStream = gulp.src(path.resolve(__dirname, 'app/server/server_game/**'))
-        .pipe(webpackStream(onPublishDevWeb ? require(path.resolve(__dirname, 'config/server/webpack.dev.js'))(['heroku']) : require(path.resolve(__dirname, 'config/server/webpack.dev.js'))(devs)));
-    webpackServerStream.pipe(gulp.dest(path.resolve(__dirname, 'dev/server/server_game/')))
-        .on('data', () => {
-            if (!webpackServer) {
-                afterStart()
-                webpackServer = true
-            }
-        })
-    return webpackServerStream
-})
-
-gulp.task('serverMain', () => {
-    return gulp.src([path.resolve(__dirname, 'app/server/**'), `!${path.resolve(__dirname, 'app/server/server_game/**')}`])
-        .pipe(onPublishDevWeb ? utls.deleteDev(['heroku']) : utls.next())
-        .pipe(gulp.dest(path.resolve(__dirname, 'dev/server')))
-})
-
-gulp.task('copyPackageWeb', (done) => {
-    fs.copyFileSync(path.resolve(__dirname, 'config/package.json'), path.resolve(__dirname, 'dev/package.json'))
+gulp.task('methods:server:startup', function server_run(done) {
+    restartServerProcess()
     done()
 })
 
-gulp.task('watchWeb',
-    gulp.parallel(checkDevs, 'webpackClient', 'webpackServer', 'assets', 'serverMain',
-        () => {
-            gulp.watch(path.resolve(__dirname, 'app/assets/**'), gulp.series('assets'))
+
+let firstReq = false
+gulp.task('methods:browser:startup', (done) => {
+    browserSyncProcess = browserSync.init({
+        proxy: `http://localhost:${env.port}`,
+        files: false,
+        watch: false,
+        port: 8080,
+        middleware: [
+
+            (req, res, next) => {
+                if (!firstReq) {
+                    res.write(browserSyncClientHtml('Loading...', 'Loading...'))
+                    res.end()
+                    firstReq = true
+                    browserSyncProcess.reload()
+                } else next()
+            },
+            (req, res, next) => {
+                if (serverGood == false && serverError != null) {
+                    res.write(browserSyncClientHtml(serverError.toString(), 'Server error'))
+                    res.end()
+                } else next()
+            }
+        ]
+    }, () => {
+        done()
+    })
+})
+
+
+// ------------------------------------------------------------------------
+
+let webpackDoneAfterStart = false
+let gulpAfterWebpackEmit = null
+gulp.task('methods:webpack:run', function webpack_run(done) {
+
+    let webpackPaths = {
+        entry: path.join(__dirname, 'app/client/index.js'),
+        output: path.join(__dirname, env.mode == 'prod' ? 'dist' : 'dev', 'client/'), // translate prod => dist
+        htmlIndex: path.join(__dirname, 'app/client/index.html'),
+        mainDir: __dirname
+    }
+
+    userAddons.push({ entry: [path.join(webpackPaths.mainDir, 'config/polyfill.js')] })
+
+    gulp.src(path.join(__dirname, 'app/**'))
+        .pipe(webpackStream(webpackRunner({
+            type: env.mode,
+            watch: env.watch,
+            stripBlocks: env.stripBlocks,
+            webpackPaths: webpackPaths,
+
+            excludeRules: excludeRules,
+            userAddons: userAddons
+        })))
+        .pipe(gulp.dest(webpackPaths.output))
+        .on('data', async (file) => {
+            if (path.basename(file.path) == 'index.html') {
+                if (!webpackDoneAfterStart) {
+
+                    if (afterWebpackEmit.length > 0) {
+                        gulpAfterWebpackEmit = gulp.series.apply({}, afterWebpackEmit)
+                        await gulpPromise(gulpAfterWebpackEmit)
+                    }
+
+                    afterStart()
+                    done()
+                    webpackDoneAfterStart = true
+                } else {
+                    if (gulpAfterWebpackEmit) await gulpPromise(gulpAfterWebpackEmit)
+                    browserSyncProcess.reload()
+                }
+            }
+        })
+})
+
+// ------------------------------------------------------------------------
+
+let serverMakeAfterStart = false
+gulp.task('methods:server:make',
+    gulp.series(
+        function server_clean() {
+            return del([
+                path.join(__dirname, env.mode == 'prod' ? 'dist' : 'dev', 'server/**')
+            ])
         },
-        () => {
-            gulp.watch([path.resolve(__dirname, 'app/server/**'), `!${path.resolve(__dirname, 'app/server/server_game/**')}`], gulp.series('serverMain'))
+        function server_make() {
+            const hash = 'JIO8dqwiuhU'
+            return gulp.src(path.join(__dirname, 'app/server/**'))
+                .pipe(gulpDeleteStripBlocks(env.stripBlocks))
+                .pipe(env.mode == 'prod' ? minify({ ext: { min: `${hash}.js` } }) : gulpNext())
+                .pipe(env.mode == 'prod' ? goodNames(hash) : gulpNext())
+                .pipe(gulp.dest(path.join(__dirname, env.mode == 'prod' ? 'dist' : 'dev', 'server/')))
+        },
+        function run_afterStart(done) {
+            done()
+            if (!serverMakeAfterStart) {
+                serverMakeAfterStart = true
+                afterStart()
+            } else {
+                restartServerProcess()
+            }
         }
     )
 )
 
-gulp.task('default', gulp.series('clean', 'watchWeb'));
-
-
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-
-gulp.task('cleanBuild', () => {
-    return gulp.src('dist', {
-        read: false,
-        allowEmpty: true
-    })
-        .pipe(clean());
-});
-
-gulp.task('assetsBuild', () => {
-    return gulp.src(path.resolve(__dirname, 'app/assets/**'))
-        .pipe(prettyData({ type: 'minify' }))
-        .pipe(imagemin())
-        .pipe(gulp.dest(path.resolve(__dirname, 'dist/assets')))
-})
-
-
-gulp.task('webpackClientBuild', () => {
-    return gulp.src(path.resolve(__dirname, 'app/client/**'))
-        .pipe(webpackStream(require(path.resolve(__dirname, 'config/client/webpack.prod.js'))(devs)))
-        .pipe(gulp.dest(path.resolve(__dirname, 'dist/client/')))
-})
-
-gulp.task('webpackServerBuild', () => {
-    return gulp.src(path.resolve(__dirname, 'app/server/server_game/**'))
-        .pipe(webpackStream(require(path.resolve(__dirname, 'config/server/webpack.prod.js'))(devs)))
-        .pipe(gulp.dest(path.resolve(__dirname, 'dist/server/server_game/')))
-})
-
-gulp.task('serverMainBuild', () => {
-    return gulp.src([path.resolve(__dirname, 'app/server/**'), `!${path.resolve(__dirname, 'app/server/server_game/**')}`])
-        .pipe(utls.deleteDev(['start', 'heroku']))
-        .pipe(minify({
-            ext: {
-                min: '_t_e_m_p_.js'
-            }
-        }))
-        .pipe(gulp.dest(path.resolve(__dirname, 'dist/server')))
-        .on('end', () => {
-            const unlinkRename = (tempPath) => {
-                const tempDir = fs.readdirSync(tempPath)
-                let files = []
-                for (const name of tempDir) {
-                    if (fs.statSync(tempPath + `/${name}`).isFile()) {
-                        files.push(name)
-                    } else {
-                        unlinkRename(tempPath + `/${name}`)
-                    }
-                }
-                let minified = []
-                for (const file of files) {
-                    if (!file.includes('_t_e_m_p_.js')) {
-                        fs.unlinkSync(tempPath + `/${file}`)
-                    } else {
-                        minified.push(file)
-                    }
-                }
-                for (const file of minified) {
-                    fs.renameSync(tempPath + `/${file}`, tempPath + `/${file.slice(0, file.indexOf('_'))}.js`)
-                }
-            }
-            const tempDir = path.resolve(__dirname, 'dist/server')
-            unlinkRename(tempDir)
-        })
-})
-
-// ------------------------------------------------------------------------
-
-gulp.task('copyPackageBuildWeb', (done) => {
-    fs.copyFileSync(path.resolve(__dirname, 'config/package.json'), path.resolve(__dirname, 'dist/package.json'))
-    done()
-})
-
-gulp.task('buildWebAll', gulp.series(gulp.parallel('webpackClientBuild', 'webpackServerBuild', 'assetsBuild', 'serverMainBuild'), 'copyPackageBuildWeb'))
-
-
-gulp.task('buildWeb', gulp.series(checkDevs, 'cleanBuild', 'buildWebAll'))
-
-
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-
-gulp.task('publish', gulp.series('buildWeb', (done) => {
-    const commad =
-        `cd ${path.resolve(__dirname, 'dist')} && 
-     git init && 
-     git remote add dist ${gitConfig.devLink} && 
-     git add . && 
-     git commit --allow-empty -am "gulp auto publish" && 
-     git push dist master --force &&
-     git remote remove dist`
-    const otherProcess = spawn(commad, {
-        shell: true
-    })
-
-    otherProcess.stderr.pipe(process.stdout)
-    otherProcess.stdout.pipe(process.stdout)
-
-    otherProcess.on('close', () => {
-        utls.deleteFolderRecursive(path.resolve(__dirname, 'dev/.git'))
-        done()
-    })
-}))
-
-gulp.task('publishDevHeroku', (done) => {
-    let b_u_i_l_d__d_o_n_e = false
-    for (const arg of process.argv) {
-        if (arg == '--b_u_i_l_d__d_o_n_e') { }
-        b_u_i_l_d__d_o_n_e = true
+gulp.task('methods:server:run', function server_run(done) {
+    if (env.watch == true) {
+        gulp.series('methods:server:make')(done)
+        gulp.watch(path.join(__dirname, 'app/server/**'), gulp.series('methods:server:make'))
     }
-    if (b_u_i_l_d__d_o_n_e) {
-        gulp.parallel('copyPackageWeb')()
-        const commad =
-            `cd ${path.resolve(__dirname, 'dev')} && 
-             git init && 
-             git remote add dev ${gitConfig.devLink} && 
-             git add . && 
-             git commit --allow-empty -am "gulp auto publish" && 
-             git push dev master --force &&
-             git remote remove dev`
-        const otherProcess = spawn(commad, {
-            shell: true
-        })
+    else if (env.watch == false) {
+        gulp.series('methods:server:make')(done)
+    } else done("Can't run directly...")
+})
 
-        otherProcess.stderr.pipe(process.stdout)
-        otherProcess.stdout.pipe(process.stdout)
+// ------------------------------------------------------------------------
 
-        otherProcess.on('close', () => {
-            utls.deleteFolderRecursive(path.resolve(__dirname, 'dev/.git'))
+let assetsMakeAfterStart = false
+gulp.task('methods:assets:make',
+    gulp.series(
+        function assets_clean() {
+            return del([
+                path.join(__dirname, env.mode == 'prod' ? 'dist' : 'dev', 'assets/**')
+            ])
+        },
+        function assets_make() {
+            return gulp.src(path.join(__dirname, 'app/assets/**'))
+                .pipe(prettyData({ type: 'minify' }))
+                .pipe(imagemin())
+                .pipe(gulp.dest(path.join(__dirname, env.mode == 'prod' ? 'dist' : 'dev', 'assets/'))) // translate prod => dits
+        },
+        function run_afterStart(done) {
             done()
-        })
-    } else {
-        onPublishDevWeb = true
-        gulp.parallel('default')()
+            if (!assetsMakeAfterStart) {
+                assetsMakeAfterStart = true
+                afterStart()
+            } else {
+                browserSyncProcess.reload()
+            }
+        }
+    )
+)
+
+gulp.task('methods:assets:run', function assets_run(done) {
+    if (env.watch == true) {
+        gulp.series('methods:assets:make')(done)
+        gulp.watch(path.join(__dirname, 'app/assets/**'), gulp.series('methods:assets:make'))
     }
-    finishPublishDev = () => {
-        done()
-        process.exit(0)
-    }
+    else if (env.watch == false) {
+        gulp.series('methods:assets:make')(done)
+    } else done("Can't run directly...")
 })
+
+// ------------------------------------------------------------------------
+
+gulp.task('methods:run',
+    gulp.series(
+        function methods_run(gDone) {
+            gulp.series(
+                `util:clean:${env.mode == 'prod' ? 'dist' : 'dev'}`,
+
+                function make_mode(done) {
+                    if (!fs.existsSync((path.join(__dirname, env.mode == 'prod' ? 'dist' : 'dev') + '/')))
+                        fs.mkdirSync(path.join(__dirname, env.mode == 'prod' ? 'dist' : 'dev') + '/')
+                    done()
+                },
+                function make_pakage(done) {
+                    if (env.packge) {
+                        const package = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json')).toString())
+                        let newPackage = {}
+                        for (const key in package) {
+                            if (key != 'devDependencies' && key != 'browserslist') {
+                                newPackage[key] = package[key]
+                            }
+                        }
+                        fs.writeFileSync(path.join(__dirname, env.mode == 'prod' ? 'dist' : 'dev', 'package.json'), JSON.stringify(newPackage))
+                    }
+                    done()
+                },
+                function after_main_folder_makup(done) {
+                    if (afterMainFolderMakup.length > 0)
+                        gulp.series.apply({}, afterMainFolderMakup)(done)
+                    else done()
+                },
+                gulp.parallel(
+                    'methods:webpack:run',
+                    'methods:assets:run',
+                    'methods:server:run'
+                ),
+                function call_done(done) {
+                    done()
+                    gDone()
+                }
+            )()
+        }
+    )
+)
+
+// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
+
+
+function run_after_normal() {
+    if (afterSetEnv.length > 0)
+        gulp.series.apply({}, afterSetEnv)()
+}
+
+
+// ------------------------------------------------------------------------ DEV
+
+function setDefaultEnvWebDev(stripBlocks) {
+    env.mode = 'dev'
+    stripBlocks.push({ base: 'dev' })
+    env.stripBlocks = makeStripBlocks(stripBlocks)
+    env.watch = true
+}
+
+// ------------------------------------------------------------------------ WEB
+
+gulp.task('dev:web',
+    gulp.series(
+        function set_env(done) {
+            setDefaultEnvWebDev([])
+            run_after_normal(),
+
+                done()
+        },
+        'methods:run'
+    )
+) // webpack watch dev for web
+gulp.task('default', gulp.series('dev:web'))
+
+
+gulp.task('dev:web:no',
+    gulp.series(
+        function set_env(done) {
+            setDefaultEnvWebDev([])
+            env.watch = false
+            run_after_normal()
+            done()
+        },
+        'methods:run'
+    )
+) // webpack (no watch) dev for web
+
+// ------------------------------------------------------------------------ BUILD
+
+function setDefaultEnvWebProd(stripBlocks) {
+    process.env.NODE_ENV = 'production'
+    env.mode = 'prod'
+    stripBlocks.push({ base: 'prod' })
+    env.stripBlocks = makeStripBlocks(stripBlocks)
+    env.watch = false
+    env.packge = true
+}
+
+gulp.task('prod:web',
+    gulp.series(
+        function set_env(done) {
+            setDefaultEnvWebProd([])
+            run_after_normal()
+
+            done()
+        },
+        'methods:run'
+    )
+)  // webpack (no watch)  prod for web
+
+
+gulp.task('prod:server',
+    gulp.series(
+        function set_env(done) {
+            setDefaultEnvWebProd([{ base: 'server' }])
+            run_after_normal()
+
+            done()
+        },
+        'methods:run'
+    )
+) // webpack build FOR server (mostly only make sense in case of stripBlocks)
+
