@@ -2,9 +2,25 @@ const MAX_PLAYERS_IN_ROOM = 2
 const MIN_PLAYERS_IN_ROOM_TO_START_GAME = 2
 
 const GENERATE_CONFIGS_CONFIGS = {
-    maps: ['1', '2', '3'],
+    maps: [
+        {
+            id: '1',
+            startPosition: {
+                x: 160,
+                y: 500,
+                ballY: 400
+            }
+        },
+        {
+            id: '2'
+        },
+        {
+            id: '3'
+        }
+    ],
     sprites: ['player1', 'player2']
 }
+
 
 let rooms = {}
 let roomsId = 0
