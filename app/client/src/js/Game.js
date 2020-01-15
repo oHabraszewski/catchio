@@ -3,6 +3,7 @@ import Phaser from 'phaser';
 import Ball from './Ball'; // pozniej sprawdze
 import Player from './Player';
 import { Canvas, Scale } from "./config/Screen";
+import Interface from './Interface'
 
 let canShotL = true,
     canShotR = true;
@@ -18,6 +19,7 @@ class Game extends Phaser.Scene {
   constructor(setup) {
     super(setup);
     this.ents = {}
+    this.points = [0,0]
     this.stop = this.stop.bind(this) //Kto pamięta Reacta?
     this.start = this.start.bind(this)
   }
@@ -33,13 +35,30 @@ class Game extends Phaser.Scene {
   }
   start(){
     this.ents.playerWASD.setPosition(config.startPosition.x * Scale, config.startPosition.y * Scale)
+    this.ents.playerWASD.body.velocity.x = 0;
+    this.ents.playerWASD.body.velocity.y = 0;
+    this.ents.playerWASD.keys.W.isDown = false
+    this.ents.playerWASD.keys.A.isDown = false
+    this.ents.playerWASD.keys.S.isDown = false
+    this.ents.playerWASD.keys.D.isDown = false
     this.ents.playerWASD.ball = null
 
     this.ents.playerArrows.setPosition(Canvas.width - config.startPosition.x * Scale, config.startPosition.y * Scale)
+    this.ents.playerArrows.body.velocity.x = 0;
+    this.ents.playerArrows.body.velocity.y = 0;
+    this.ents.playerArrows.cursors.up.isDown = false //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+    this.ents.playerArrows.cursors.left.isDown = false
+    this.ents.playerArrows.cursors.down.isDown = false
+    this.ents.playerArrows.cursors.right.isDown = false
     this.ents.playerArrows.ball = null
+    console.log(this.ents.playerArrows)
 
     this.ents.ball.setPosition(Canvas.width / 2, config.ballY * Scale)
+    this.ents.ball.body.velocity.x = 0;
+    this.ents.ball.body.velocity.y = 0;
     this.ents.ball.owner = null
+
+    this.ents.interface.createTimer()
     setTimeout(()=>{this.scene.resume()}, 3000)
   }
   stop(){
@@ -59,20 +78,28 @@ class Game extends Phaser.Scene {
     layer.setTileIndexCallback(5, (object, obj)=>{
       if(canShotL && object == this.ents.ball){
         canShotL = false;
+        this.points[1]++
+        this.ents.interface.updatePoints(this.points[0], this.points[1])
         setTimeout(()=>{
           this.stop()
+        },200)
+        setTimeout(()=>{
           this.start()
-        },500)
+        },1200)
         setTimeout(()=>{canShotL = true},5000)
       }
     })
     layer.setTileIndexCallback(2, (object, obj)=>{
       if(canShotR && object == this.ents.ball){
         canShotR = false;
+        this.points[0]++
+        this.ents.interface.updatePoints(this.points[0], this.points[1])
         setTimeout(()=>{
           this.stop()
+        },200)
+        setTimeout(()=>{
           this.start()
-        },500)
+        },1200)
         setTimeout(()=>{canShotR = true},5000)
       }
     })
@@ -94,13 +121,16 @@ class Game extends Phaser.Scene {
 
     this.ents.startOverlap = this.physics.add.overlap(this.ents.ball, this.ents.playerWASD, setOwn);
     this.ents.startOverlap2 = this.physics.add.overlap(this.ents.ball, this.ents.playerArrows, setOwn);
+
+    this.ents.interface = new Interface(this)
+    this.ents.interface.updatePoints(0,0)//Musi być dla dobrej czcionki
   }
 
   update() {
     this.ents.ball.moveToPlayer(this);
-
     this.ents.playerArrows.walk();
     this.ents.playerWASD.alternativeWalk();
+    
   }
   resize(){
     console.log("Zmieniono  wielkość")
