@@ -31,8 +31,17 @@ class Game extends Phaser.Scene {
 
     this.load.image('ball', "/assets/img/bol.png");
 
-    this.load.image('playerWASD', "/assets/img/red/PinkyWinky.png");
+    this.load.image('playerWASD', "/assets/img/red/PinkyWinky.png");         //Wkrótce przerobię na atlas
+    this.load.image('upplayerWASD', "/assets/img/red/upPinkyWinky.png");
+    this.load.image('leftplayerWASD', "/assets/img/red/leftPinkyWinky.png");
+    this.load.image('downplayerWASD', "/assets/img/red/downPinkyWinky.png");
+    this.load.image('rightplayerWASD', "/assets/img/red/rightPinkyWinky.png");
+
     this.load.image('playerArrows', "/assets/img/blue/BlueBlue.png");
+    this.load.image('upplayerArrows', "/assets/img/blue/upBlueBlue.png");
+    this.load.image('leftplayerArrows', "/assets/img/blue/leftBlueBlue.png");
+    this.load.image('downplayerArrows', "/assets/img/blue/downBlueBlue.png");
+    this.load.image('rightplayerArrows', "/assets/img/blue/rightBlueBlue.png");
   }
   start(){
     this.ents.playerWASD.setPosition(config.startPosition.x, config.startPosition.y)
