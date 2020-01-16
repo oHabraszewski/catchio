@@ -25,36 +25,69 @@ class Player extends Phaser.GameObjects.Sprite {
 
 
   walk() {
-
+    let isY = true;
     if (this.cursors.left.isDown) { // Ruch w lewo
       this.body.setAccelerationX(-this.acceleration);
-
     } else if (this.cursors.right.isDown) { // Ruch w prawo
       this.body.setAccelerationX(this.acceleration);
-
     } else {
       this.body.setAccelerationX(0);
-
     }
+
     if (this.cursors.up.isDown && this.body.velocity.y == 0 && !(this.body.blocked.up)) { // Skok
       this.body.setVelocityY(this.jumpSpeed);
+    }
+
+    if(this.body.velocity.y < -75){
+      this.setTexture('upplayerArrows')
+    }
+    else if(this.body.velocity.y > 75){
+      this.setTexture('downplayerArrows')
+    }else{
+      isY = false;
+    }
+
+    if(this.body.velocity.x < -75){
+      this.setTexture('leftplayerArrows')
+    }
+    else if(this.body.velocity.x > 75){
+      this.setTexture('rightplayerArrows')
+    }else if(!isY){
+      this.setTexture('playerArrows')
     }
 
   }
 
   alternativeWalk() {
+    let isY = true;
     if (this.keys.A.isDown) { // Ruch w lewo
-
       this.body.setAccelerationX(-this.acceleration);
     } else if (this.keys.D.isDown) { // Ruch w prawo
       this.body.setAccelerationX(this.acceleration);
-
     } else {
       this.body.setAccelerationX(0);
-
     }
+
     if (this.keys.W.isDown && this.body.velocity.y == 0  && !(this.body.blocked.up)) { // Skok
       this.body.setVelocityY(this.jumpSpeed);
+    }
+
+    if(this.body.velocity.y < -75){
+      this.setTexture('upplayerWASD')
+    }
+    else if(this.body.velocity.y > 75){
+      this.setTexture('downplayerWASD')
+    }else{
+      isY = false;
+    }
+    
+    if(this.body.velocity.x < -75){
+      this.setTexture('leftplayerWASD')
+    }
+    else if(this.body.velocity.x > 75){
+      this.setTexture('rightplayerWASD')
+    }else if(!isY){
+      this.setTexture('playerWASD')
     }
   }
 

@@ -8,12 +8,17 @@ import Phaser from 'phaser';
 
 const config = {
     type: Phaser.AUTO,
-    width: 1920 * Scale, //Szerokość gry przyjmuje rozmiar okienka
-    height: 1080 * Scale, //Wysokość gry przyjmuje wysokość okienka
+    width: 1920, //Szerokość gry przyjmuje rozmiar okienka
+    height: 1080, //Wysokość gry przyjmuje wysokość okienka
+    scale: {
+        mode: Phaser.Scale.FIT,
+        width: 1920,
+        height: 1080,
+    },
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: Canvas.height * 2 }, // Dzieki temu na kazdym rozmiarze monitora gracz bedzie spadal tyle samo czasu
+            gravity: { y: Canvas.height * 1.8 }, // Dzieki temu na kazdym rozmiarze monitora gracz bedzie spadal tyle samo czasu
             debug: false
         }
     },
