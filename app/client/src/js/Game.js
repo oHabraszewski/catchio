@@ -45,8 +45,7 @@ class Game extends Phaser.Scene {
   }
   start(){
     this.ents.playerWASD.setPosition(config.startPosition.x, config.startPosition.y)
-    this.ents.playerWASD.body.velocity.x = 0;
-    this.ents.playerWASD.body.velocity.y = 0;
+    this.ents.playerWASD.body.setVelocity(0,0)
     this.ents.playerWASD.keys.W.isDown = false
     this.ents.playerWASD.keys.A.isDown = false
     this.ents.playerWASD.keys.S.isDown = false
@@ -54,8 +53,7 @@ class Game extends Phaser.Scene {
     this.ents.playerWASD.ball = null
 
     this.ents.playerArrows.setPosition(Canvas.width - config.startPosition.x, config.startPosition.y)
-    this.ents.playerArrows.body.velocity.x = 0;
-    this.ents.playerArrows.body.velocity.y = 0;
+    this.ents.playerArrows.body.setVelocity(0,0)
     this.ents.playerArrows.cursors.up.isDown = false //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
     this.ents.playerArrows.cursors.left.isDown = false
     this.ents.playerArrows.cursors.down.isDown = false
@@ -64,8 +62,7 @@ class Game extends Phaser.Scene {
     console.log(this.ents.playerArrows)
 
     this.ents.ball.setPosition(Canvas.width / 2, config.ballY)
-    this.ents.ball.body.velocity.x = 0;
-    this.ents.ball.body.velocity.y = 0;
+    this.ents.ball.body.setVelocity(0,0)
     this.ents.ball.owner = null
 
     this.ents.interface.createTimer()
@@ -83,7 +80,7 @@ class Game extends Phaser.Scene {
     const map = this.make.tilemap({ key: "map", tileWidth: 40, tileHeight: 40 });
     const tileset = map.addTilesetImage("tiles");
     const layer = map.createStaticLayer(0, tileset,0,0);
-    layer.setCollision([3,0])
+    layer.setCollision([3,0])//, true, false)
     layer.setTileIndexCallback(5, (object, obj)=>{
       if(canShotL && object == this.ents.ball){
         canShotL = false;
@@ -118,9 +115,9 @@ class Game extends Phaser.Scene {
     const setOwn = Ball.setOwner.bind(this)
 
     this.ents.playerWASD = new Player(this, config.startPosition.x, config.startPosition.y, 'playerWASD');
+    
 
     this.ents.playerArrows = new Player(this, Canvas.width - config.startPosition.x, config.startPosition.y, 'playerArrows');
-    
 
     this.physics.add.collider(this.ents.playerWASD, layer);
     this.physics.add.collider(this.ents.playerArrows, layer);
