@@ -49,7 +49,7 @@ class Ball extends Phaser.GameObjects.Sprite {
                 }, 1000)
             }
         }
-
+        
         //this.ents.startOverlap.destroy();
         //this.ents.startOverlap2.destroy();
     }
