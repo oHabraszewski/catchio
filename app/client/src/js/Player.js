@@ -18,8 +18,8 @@ class Player extends Phaser.GameObjects.Sprite {
     scene.physics.world.enable(this);
 
     this.body.setCollideWorldBounds(true);
-    this.body.setMaxVelocity(Canvas.width / 5, 2000);
-    this.body.setDragX(1000);
+    this.body.setMaxVelocity(Canvas.width / 5, 1500);
+    this.body.setDrag(1000, 50);
 
     this.cursors = scene.input.keyboard.createCursorKeys();
     this.keys = scene.input.keyboard.addKeys('W,S,A,D');
@@ -38,7 +38,7 @@ class Player extends Phaser.GameObjects.Sprite {
       this.body.setAccelerationX(0);
     }
 
-    if (this.cursors.up.isDown && this.body.velocity.y == 0 && !(this.body.blocked.up)) { // Skok
+    if (this.cursors.up.isDown && this.body.velocity.y == 0 && this.body.blocked.down && !(this.body.blocked.up)) { // Skok
       this.body.setVelocityY(this.jumpSpeed);
     }
 

@@ -11,6 +11,7 @@ class Ball extends Phaser.GameObjects.Sprite {
         scene.add.existing(this);
         scene.physics.world.enable(this);
         this.scene = scene
+        
         this.body.setDragX(300);
         this.body.setCollideWorldBounds(true);
     }
