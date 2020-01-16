@@ -20,10 +20,18 @@ module.exports = (room) => {
         let restartEvent = true
         room.on('restart', (player) => {
             if (restartEvent && room.gameplay) {
+                room.emit('stopGame')
                 restartEvent = false
                 room.gameplay = false
                 player.score++
-                startGame(room, false)
+
+                const score = {}
+                for (const playerId in room.players) {
+                    const player = room.players[playerId]
+                    score[player.socket.id] = player.score
+                }
+
+                startGame(room, false, { score })
                 setTimeout(() => { restartEvent = true }, 4000);
             }
         })
@@ -33,7 +41,7 @@ module.exports = (room) => {
 
 
 
-function startGame(room, changePlayers) {
-    room.emit('startGame', generateConfigs(room, changePlayers))
+function startGame(room, changePlayers, addToConf = {}) {
+    room.emit('startGame', { ...generateConfigs(room, changePlayers), ...addToConf })
     room.gameplay = true
 }

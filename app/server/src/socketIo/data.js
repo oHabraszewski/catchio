@@ -6,7 +6,7 @@ const GENERATE_CONFIGS_CONFIGS = {
         {
             id: '1',
             startPosition: {
-                x: 160,
+                x: 200,
                 y: 500,
                 ballY: 400
             }

@@ -1,9 +1,9 @@
-import { Scale } from '../config/Screen'
-
 export function updatePos() {
     this.socket.emit('newPos', {
-        x: this.player.x / Scale,
-        y: this.player.y / Scale
+        x: this.player.x,
+        y: this.player.y,
+        xVel: this.player.body.velocity.x,
+        yVel: this.player.body.velocity.y
     })
 }
 

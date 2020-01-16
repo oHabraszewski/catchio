@@ -1,12 +1,14 @@
 //Plik zawierający ogólną klasę gracza
 import Phaser from 'phaser';
-import { Canvas, Scale } from "./config/Screen";
+import { Canvas } from "./config/Screen";
 
 
 class Player extends Phaser.GameObjects.Sprite {
   constructor(scene, x, y, texture, ) {
     super(scene, x, y, texture);
 
+    this.pointsIndex = null
+    this.defaultSpriteId = ''
     this.human = true
     this.ball = null
     this.jumpSpeed = -Canvas.height;
@@ -30,19 +32,40 @@ class Player extends Phaser.GameObjects.Sprite {
   walk() {
     if (this.cursors.left.isDown) { // Ruch w lewo
       this.body.setAccelerationX(-this.acceleration);
-
     } else if (this.cursors.right.isDown) { // Ruch w prawo
       this.body.setAccelerationX(this.acceleration);
-
     } else {
       this.body.setAccelerationX(0);
-
     }
-    if (this.cursors.up.isDown && this.body.blocked.down && this.body.velocity.y == 0 && !(this.body.blocked.up)) { // Skok
+
+    if (this.cursors.up.isDown && this.body.velocity.y == 0 && !(this.body.blocked.up)) { // Skok
       this.body.setVelocityY(this.jumpSpeed);
     }
+
   }
 
+  static updateTexture(player) {
+    let isY = true;
+
+    if (player.body.velocity.y < -75) {
+      player.setTexture(`up${player.defaultSpriteId}`)
+    }
+    else if (player.body.velocity.y > 75) {
+      player.setTexture(`down${player.defaultSpriteId}`)
+    } else {
+      isY = false;
+    }
+
+    if (player.body.velocity.x < -75) {
+      player.setTexture(`left${player.defaultSpriteId}`)
+    }
+    else if (player.body.velocity.x > 75) {
+      player.setTexture(`right${player.defaultSpriteId}`)
+    } else if (!isY) {
+      player.setTexture(player.defaultSpriteId)
+    }
+
+  }
   // static getBall(player1, player2) {
   //   if (player1.ball == null && player2.ball == null) return
   //   if (canGet) {

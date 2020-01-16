@@ -1,8 +1,7 @@
-import { Scale } from '../config/Screen'
-
 export default function () {
     this.socket.on('updateOtherPlayer', (otherPlayer) => {
-        this.otherPlayer.setPosition(otherPlayer.x * Scale, otherPlayer.y * Scale)
+        this.otherPlayer.setPosition(otherPlayer.x, otherPlayer.y)
+        this.otherPlayer.body.setVelocity(otherPlayer.xVel, otherPlayer.yVel)
     })
 
     this.socket.on('newBallOwner', () => {
@@ -13,5 +12,4 @@ export default function () {
         this.player.ball = null
     })
 
-    // update ball state
 }

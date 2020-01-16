@@ -9,14 +9,29 @@ export default function () {
 
     socket.on('startGame', (gameConfig) => {
         // console.log(`start game: `, gameConfig)
-        if(this.gameplay) this.stop()
+        console.log(gameConfig)
+        if (gameConfig.score) {
+            rearengeScore.call(this, gameConfig.score)
+        }
+
+        if (this.gameplay) this.stop()
         this.start(gameConfig)
     })
 
     socket.on('stopGame', () => {
-        console.log(`stop game`)
         this.stop()
-    })  
+    })
 
     gamplay.call(this)
+}
+
+function rearengeScore(score) {
+    const thisPlayerScore = score[this.socket.id]
+    delete score[this.socket.id]
+    const otherPlayerScore = Object.values(score)[0]
+
+    this.points[this.player.pointsIndex] = thisPlayerScore
+    this.points[this.otherPlayer.pointsIndex] = otherPlayerScore
+    this.ents.interface.updatePoints(this.points[0], this.points[1])
+
 }

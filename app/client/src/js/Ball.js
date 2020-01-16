@@ -19,6 +19,13 @@ class Ball extends Phaser.GameObjects.Sprite {
         if (this.owner != null) {
             this.scene.physics.moveToObject(this, this.owner, 1000, 100)
         }
+        if(this.body.velocity.x > 5.5 || this.body.velocity.x < -5.5){
+            
+            this.body.setAngularVelocity( (this.body.velocity.x + this.body.velocity.y) /2)
+        }else{
+            this.body.setAngularVelocity(0)
+        }
+        
     }
     removeOwner() {
         this.owner.ball = null
