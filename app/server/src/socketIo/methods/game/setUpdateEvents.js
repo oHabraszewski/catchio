@@ -1,3 +1,5 @@
+const startGame = require('./startGame').startGame
+
 module.exports = (room) => {
 
     room.on('newPos', (newPos, player) => {

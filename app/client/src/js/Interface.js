@@ -11,6 +11,13 @@ class Interface {
             timer: scene.add.text(Canvas.width / 2, Canvas.height / 2, "", { fontFamily: 'Comfortaa', fontSize: (size * 5) + 'px', stroke: "#111", strokeThickness: size * 4 / 5 }).setOrigin(0.5, 0.5)
         }
     }
+
+    setDepth(value) {
+        this.texts.points1.setDepth(value)
+        this.texts.points2.setDepth(value)
+        this.texts.timer.setDepth(value)
+    }
+    
     updatePoints(p1Points, p2Points) {
         this.texts.points1.setText(p1Points)
         this.texts.points2.setText(p2Points)

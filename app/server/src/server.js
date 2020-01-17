@@ -11,6 +11,7 @@ const staticFiles = (prefix, path) => koaMount(prefix, koaStatic(path))
 
 const socketIo = require('socket.io')
 const logger = require('./logger/logger')
+logger.createLogsFile()
 
 const app = new koa()
 const server = createServer(app.callback())
@@ -23,15 +24,13 @@ const PORT = process.env.PORT || 8080
 app.use(bodyParser())
 
 const connection = require('./socketIo/connection')
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
     connection.connect(socket)
 })
 
 
-router.get('/admin/logs/', async (ctx) => {
-    console.log(ctx.query)
-})
-
+const adminRoutes = require('./admin/router')
+router.use(adminRoutes.routes())
 app.use(router.routes()).use(router.allowedMethods())
 
 app.use(staticFiles('/', path.join(__dirname, '../../client/')))

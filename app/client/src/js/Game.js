@@ -6,22 +6,21 @@ import Player from './Player';
 import { Canvas } from "./config/Screen";
 import connection from './socketIo/connection'
 import Interface from './Interface'
+import map from './map'
 
 import defaultConfig from './config/default'
 import { updatePos } from './socketIo/update'
 
 
-let canShotL = true
-let canShotR = true
-
-let shotRTimeout = null
-let shotLTimeout = null
+let shotRTimeoutGlobal = null
+let shotLTimeoutGlobal = null
 
 class Game extends Phaser.Scene {
   constructor(setup) {
     super(setup);
     this.ents = {}
     this.updatePosSocket = updatePos.bind(this)
+    this.gamplay = false
     this.points = [0, 0]
     this.canvas = null;
   }
@@ -59,11 +58,16 @@ class Game extends Phaser.Scene {
   }
 
   resetToDefault() {
+    this.points[0] = 0
+    this.points[1] = 0
+    this.ents.interface.updatePoints('', '')
+
     this.ents.player1.setPosition(defaultConfig.playerPos.x, defaultConfig.playerPos.y)
     this.ents.player2.setPosition(Canvas.width - defaultConfig.playerPos.x, defaultConfig.playerPos.y)
     this.ents.ball.setPosition(Canvas.width / 2, defaultConfig.ballY)
   }
-  resetPlayer(key){
+
+  resetPlayer(key) {
     const playerId = `player${key}`
     this.ents[playerId].keys.W.isDown = false;
     this.ents[playerId].keys.S.isDown = false;
@@ -73,7 +77,7 @@ class Game extends Phaser.Scene {
     this.ents[playerId].cursors.down.isDown = false;
     this.ents[playerId].cursors.left.isDown = false;
     this.ents[playerId].cursors.right.isDown = false;
-    this.ents[playerId].body.setVelocity(0,0)
+    this.ents[playerId].body.setVelocity(0, 0)
     this.ents[playerId].ball = null
   }
 
@@ -87,7 +91,7 @@ class Game extends Phaser.Scene {
     this.resetPlayer('2')
 
     this.ents.ball.setPosition(Canvas.width / 2, startPosition.ballY)
-    this.ents.ball.body.setVelocity(0,0)
+    this.ents.ball.body.setVelocity(0, 0)
     this.ents.ball.owner = null
 
     const spritesKeys = Object.keys(gameConfig.sprites)
@@ -115,39 +119,16 @@ class Game extends Phaser.Scene {
         }
       }
     }
-    const map = this.make.tilemap({ key: "map" + gameConfig.map.id, tileWidth: 40, tileHeight: 40 });
-    const tileset = map.addTilesetImage("tiles");
-    this.ents.layer = map.createStaticLayer(0, tileset, 0, 0);
-    this.ents.layer.setCollision([3, 0])
 
-    this.ents.layer.setTileIndexCallback(5, (object, obj) => {
-      if (canShotL && object == this.ents.ball) {
-        canShotL = false;
-        this.points[1]++
-        this.ents.interface.updatePoints(this.points[0], this.points[1])
-        shotLTimeout = setTimeout(() => {
-          this.stop()
-          if (this.player.pointsIndex == 1) this.socket.emit('restart')
-        }, 500)
-        setTimeout(() => { canShotL = true }, 5000)
-      }
-    })
+    const { shotLTimeout, shotRTimeout } = map.call(this, gameConfig.map.id)
+    shotLTimeoutGlobal = shotLTimeout
+    shotRTimeoutGlobal = shotRTimeout
 
-    this.ents.layer.setTileIndexCallback(2, (object, obj) => {
-      if (canShotR && object == this.ents.ball) {
-        canShotR = false;
-        this.points[0]++
-        this.ents.interface.updatePoints(this.points[0], this.points[1])
-        shotRTimeout = setTimeout(() => {
-          this.stop()
-          if (this.player.pointsIndex == 0) this.socket.emit('restart')
-        }, 500)
-        setTimeout(() => { canShotR = true }, 5000)
-      }
-    })
     this.ents.player1.setDepth(1)
     this.ents.player2.setDepth(1)
     this.ents.ball.setDepth(1)
+    this.ents.interface.setDepth(1)
+
     this.ents.colls.p1l.destroy()
     this.ents.colls.p2l.destroy()
     this.ents.colls.bl.destroy()
@@ -155,22 +136,21 @@ class Game extends Phaser.Scene {
     this.ents.colls.p1l = this.physics.add.collider(this.ents.player1, this.ents.layer);
     this.ents.colls.p2l = this.physics.add.collider(this.ents.player2, this.ents.layer);
     this.ents.colls.bl = this.physics.add.collider(this.ents.ball, this.ents.layer);
-
-    // id mapy pod: gameConfig.map.id
-    // mapy oraz startPosition dla mapy jest dostęna pod: app/server/src/socketIo/data.js
-    //  set map
   }
 
   start(gameConfig) {
-    if (shotLTimeout != null) clearTimeout(shotLTimeout)
-    if (shotRTimeout != null) clearTimeout(shotRTimeout)
+    this.gamplay = true
+    if (shotLTimeoutGlobal != null) clearTimeout(shotLTimeoutGlobal)
+    if (shotRTimeoutGlobal != null) clearTimeout(shotRTimeoutGlobal)
     this.resetForGamplay(gameConfig)
+    this.ents.interface.updatePoints(0, 0)
     this.ents.interface.createTimer().then(() => {
-      this.scene.resume()
+      if (this.gamplay) this.scene.resume()
     })
   }
 
   stop() {
+    this.gamplay = false
     this.scene.pause()
     this.resetToDefault()
   }
@@ -180,40 +160,16 @@ class Game extends Phaser.Scene {
     this.canvas = document.getElementsByTagName('canvas')[0]
     this.canvas.setAttribute("width", 1920)
     this.canvas.setAttribute("height", 1080)
-    //Konfiguracja mapy z tileów
-    const map = this.make.tilemap({ key: "map3", tileWidth: 40, tileHeight: 40 }); // nie wiemy na ten moment jaka będzie mapa
-    const tileset = map.addTilesetImage("tiles");
-    this.ents.layer = map.createStaticLayer(0, tileset, 0, 0);
-    this.ents.layer.setCollision([3, 0])
 
-    this.ents.layer.setTileIndexCallback(5, (object, obj) => {
-      if (canShotL && object == this.ents.ball) {
-        canShotL = false;
-        this.points[1]++
-        this.ents.interface.updatePoints(this.points[0], this.points[1])
-        shotLTimeout = setTimeout(() => {
-          this.stop()
-          if (this.player.pointsIndex == 1) this.socket.emit('restart')
-        }, 500)
-        setTimeout(() => { canShotL = true }, 5000)
-      }
-    })
+    // ------------------------------------------------------------------------
+    // DOCELOWO TEGO MA NIE BYĆ ! to jest ekran "oczekiwania" na inncyh graczy
 
-    this.ents.layer.setTileIndexCallback(2, (object, obj) => {
-      if (canShotR && object == this.ents.ball) {
-        canShotR = false;
-        this.points[0]++
-        this.ents.interface.updatePoints(this.points[0], this.points[1])
-        shotRTimeout = setTimeout(() => {
-          this.stop()
-          if (this.player.pointsIndex == 0) this.socket.emit('restart')
-        }, 500)
-        setTimeout(() => { canShotR = true }, 5000)
-      }
-    })
+    map.call(this, '3')
+
+    // ------------------------------------------------------------------------
 
     this.ents.ball = new Ball(this, Canvas.width / 2, defaultConfig.ballY, 'ball');
-    this.ents.ball.setScale(1.5)
+    this.ents.ball.setScale(1.3)
     this.setOwn = Ball.setOwner.bind(this)
 
     this.ents.player1 = new Player(this, defaultConfig.playerPos.x, defaultConfig.playerPos.y, 'PinkyWinky');
@@ -227,11 +183,10 @@ class Game extends Phaser.Scene {
     this.ents.colls.p2l = this.physics.add.collider(this.ents.player2, this.ents.layer);
     this.ents.colls.bl = this.physics.add.collider(this.ents.ball, this.ents.layer);
 
-    this.stop()
-
     this.ents.interface = new Interface(this)
-    setTimeout(() => { this.ents.interface.updatePoints(0, 0) }, 1000)//Musi być dla dobrej czcionki
     this.time.advancedTiming = true
+
+    this.stop()
 
     this.socket = io(/* dev:start */ 'localhost:8000' /* dev:end */)
     connection.connect.call(this)
@@ -241,7 +196,6 @@ class Game extends Phaser.Scene {
     this.ents.ball.moveToPlayer(this);
     this.player.walk()
     this.updatePosSocket()
-    console.log(this.ents.player1.x)
     Player.updateTexture(this.player)
     Player.updateTexture(this.otherPlayer)
   }

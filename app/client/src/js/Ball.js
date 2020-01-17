@@ -16,16 +16,24 @@ class Ball extends Phaser.GameObjects.Sprite {
         this.body.setCollideWorldBounds(true);
     }
 
-    moveToPlayer() {
+    moveToPlayer(game) {
         if (this.owner != null) {
             this.scene.physics.moveToObject(this, this.owner, 1000, 100)
-        }
-        if (this.body.velocity.x > 5.5 || this.body.velocity.x < -5.5) {
 
-            this.body.setAngularVelocity((this.body.velocity.x + this.body.velocity.y) / 2)
-        } else {
-            this.body.setAngularVelocity(0)
+            const a = Math.abs(this.body.x - this.owner.body.x)
+            const b = Math.abs(this.body.y - this.owner.body.y)
+            const distanceToOwner = Math.sqrt(Math.pow(a, 2) * Math.pow(b, 2))
+
+            if (distanceToOwner > 1000) {
+                game.ents.colls.bl.overlapOnly = true
+            } else {
+                if (game.ents.colls.bl.overlapOnly) game.ents.colls.bl.overlapOnly = false
+            }
         }
+
+        if (this.body.velocity.x > 5.5 || this.body.velocity.x < -5.5)
+            this.body.setAngularVelocity((this.body.velocity.x + this.body.velocity.y) / 2)
+        else this.body.setAngularVelocity(0)
     }
 
     removeOwner() {

@@ -1,5 +1,13 @@
 const data = require('../../data')
 const generateConfigs = require('./generateConfigs')
+
+function startGame(room, changePlayers, addToConf = {}) {
+    room.emit('startGame', { ...generateConfigs(room, changePlayers), ...addToConf })
+    room.gameplay = true
+}
+
+module.exports.startGame = startGame
+
 const setUpdateEvents = require('./setUpdateEvents')
 
 module.exports = (room) => {
@@ -10,8 +18,3 @@ module.exports = (room) => {
 }
 
 
-
-function startGame(room, changePlayers, addToConf = {}) {
-    room.emit('startGame', { ...generateConfigs(room, changePlayers), ...addToConf })
-    room.gameplay = true
-}
