@@ -21,38 +21,42 @@ class Game extends Phaser.Scene {
   constructor(setup) {
     super(setup);
     this.ents = {}
-    this.gameplay = true
+    //this.gameplay = true
     this.updatePosSocket = updatePos.bind(this)
     this.points = [0, 0]
     this.canvas = null;
   }
 
   preload() {
-    // this.load.tilemapCSV("map", "/assets/img/map/map.csv");
-    // this.load.image("tiles", "/assets/img/map/tiles.png");
-
-    // this.load.image('ball', "/assets/img/ball.png");
-
-    // this.load.image('player1', "/assets/img/red/player.png");
-    // this.load.image('player2', "/assets/img/blue/player.png");
-
-
-    this.load.tilemapCSV("map", "/assets/img/map/map.csv");
+    this.load.tilemapCSV("map1", "/assets/img/map/map1.csv");
+    this.load.tilemapCSV("map2", "/assets/img/map/map2.csv");
+    this.load.tilemapCSV("map3", "/assets/img/map/map3.csv");
     this.load.image("tiles", "/assets/img/map/tiles.png");
 
     this.load.image('ball', "/assets/img/bol.png");
 
-    this.load.image('player1', "/assets/img/red/PinkyWinky.png");         //Wkrótce przerobię na atlas
-    this.load.image('upplayer1', "/assets/img/red/upPinkyWinky.png");
-    this.load.image('leftplayer1', "/assets/img/red/leftPinkyWinky.png");
-    this.load.image('downplayer1', "/assets/img/red/downPinkyWinky.png");
-    this.load.image('rightplayer1', "/assets/img/red/rightPinkyWinky.png");
+    this.load.atlas("PinkyWinky", '/assets/img/red/atlasPinkyWinky.png', '/assets/img/red/atlasPinkyWinky.json')
 
-    this.load.image('player2', "/assets/img/blue/BlueBlue.png");
-    this.load.image('upplayer2', "/assets/img/blue/upBlueBlue.png");
-    this.load.image('leftplayer2', "/assets/img/blue/leftBlueBlue.png");
-    this.load.image('downplayer2', "/assets/img/blue/downBlueBlue.png");
-    this.load.image('rightplayer2', "/assets/img/blue/rightBlueBlue.png");
+    this.load.atlas("BlueBlue", '/assets/img/blue/atlasBlueBlue.png', '/assets/img/blue/atlasBlueBlue.json')
+    // this.load.image('player1', "/assets/img/red/PinkyWinky.png");         //Przerobiłem na atlas
+    // this.load.image('upplayer1', "/assets/img/red/upPinkyWinky.png");
+    // this.load.image('leftplayer1', "/assets/img/red/leftPinkyWinky.png");
+    // this.load.image('downplayer1', "/assets/img/red/downPinkyWinky.png");
+    // this.load.image('rightplayer1', "/assets/img/red/rightPinkyWinky.png");
+    // this.load.image('leftupplayer1', "/assets/img/red/leftupPinkyWinky.png");
+    // this.load.image('leftdownplayer1', "/assets/img/red/leftdownPinkyWinky.png");
+    // this.load.image('rightupplayer1', "/assets/img/red/rightupPinkyWinky.png");
+    // this.load.image('rightdownplayer1', "/assets/img/red/rightdownPinkyWinky.png");
+
+    // this.load.image('player2', "/assets/img/blue/BlueBlue.png");
+    // this.load.image('upplayer2', "/assets/img/blue/upBlueBlue.png");
+    // this.load.image('leftplayer2', "/assets/img/blue/leftBlueBlue.png");
+    // this.load.image('downplayer2', "/assets/img/blue/downBlueBlue.png");
+    // this.load.image('rightplayer2', "/assets/img/blue/rightBlueBlue.png");
+    // this.load.image('leftupplayer2', "/assets/img/blue/leftupBlueBlue.png");
+    // this.load.image('leftdownplayer2', "/assets/img/blue/leftdownBlueBlue.png");
+    // this.load.image('rightupplayer2', "/assets/img/blue/rightupBlueBlue.png");
+    // this.load.image('rightdownplayer2', "/assets/img/blue/rightdownBlueBlue.png");
   }
 
   resetToDefault() {
@@ -60,23 +64,30 @@ class Game extends Phaser.Scene {
     this.ents.player2.setPosition(Canvas.width - defaultConfig.playerPos.x, defaultConfig.playerPos.y)
     this.ents.ball.setPosition(Canvas.width / 2, defaultConfig.ballY)
   }
+  resetPlayer(key){
+    this.ents['player' + key].keys.W.isDown = false;
+    this.ents['player' + key].keys.S.isDown = false;
+    this.ents['player' + key].keys.A.isDown = false;
+    this.ents['player' + key].keys.D.isDown = false;
+    this.ents['player' + key].cursors.up.isDown = false;
+    this.ents['player' + key].cursors.down.isDown = false;
+    this.ents['player' + key].cursors.left.isDown = false;
+    this.ents['player' + key].cursors.right.isDown = false;
+    this.ents['player' + key].body.setVelocity(0,0)
+    this.ents['player' + key].ball = null
+  }
 
   resetForGamplay(gameConfig) {
     const startPosition = gameConfig.map.startPosition
 
     this.ents.player1.setPosition(startPosition.x, startPosition.y)
-    this.ents.player1.body.velocity.x = 0;
-    this.ents.player1.body.velocity.y = 0;
-    this.ents.player1.ball = null
+    this.resetPlayer(1)
 
     this.ents.player2.setPosition(Canvas.width - startPosition.x, startPosition.y)
-    this.ents.player2.body.velocity.x = 0;
-    this.ents.player2.body.velocity.y = 0;
-    this.ents.player2.ball = null
+    this.resetPlayer(2)
 
     this.ents.ball.setPosition(Canvas.width / 2, startPosition.ballY)
-    this.ents.ball.body.velocity.x = 0;
-    this.ents.ball.body.velocity.y = 0;
+    this.ents.ball.body.setVelocity(0,0)
     this.ents.ball.owner = null
 
     const spritesKeys = Object.keys(gameConfig.sprites)
@@ -91,7 +102,7 @@ class Game extends Phaser.Scene {
         } else {
           this.player.pointsIndex = 1
         }
-
+        this.ents.startOverlap = this.physics.add.overlap(this.ents.ball, this.player, this.setOwn);
         this.player.setHuman(true)
       } else {
         this.otherPlayer = this.ents[gameConfig.sprites[socketId]]
@@ -115,16 +126,16 @@ class Game extends Phaser.Scene {
     this.resetForGamplay(gameConfig)
     this.ents.interface.createTimer().then(() => {
       this.scene.resume()
-      this.gameplay = true
+      //this.gameplay = true
     })
   }
 
   stop() {
-    if (this.gameplay) {
-      this.gameplay = false
-      this.scene.pause()
-      this.resetToDefault()
-    }
+    //if (this.gameplay) {
+      //this.gameplay = false
+    this.scene.pause()
+    this.resetToDefault()
+    //}
   }
 
   create() {
@@ -133,10 +144,9 @@ class Game extends Phaser.Scene {
     this.canvas.setAttribute("width", 1920)
     this.canvas.setAttribute("height", 1080)
     //Konfiguracja mapy z tileów
-    const map = this.make.tilemap({ key: "map", tileWidth: 40, tileHeight: 40 }); // nie wiemy na ten moment jaka będzie mapa
+    const map = this.make.tilemap({ key: "map3", tileWidth: 40, tileHeight: 40 }); // nie wiemy na ten moment jaka będzie mapa
     const tileset = map.addTilesetImage("tiles");
     const layer = map.createStaticLayer(0, tileset, 0, 0);
-    // layer.setScale(Scale, Scale)
     layer.setCollision([3, 0])
 
     layer.setTileIndexCallback(5, (object, obj) => {
@@ -167,20 +177,20 @@ class Game extends Phaser.Scene {
 
     this.ents.ball = new Ball(this, Canvas.width / 2, defaultConfig.ballY, 'ball');
     this.ents.ball.setScale(1.5)
-    const setOwn = Ball.setOwner.bind(this)
+    this.setOwn = Ball.setOwner.bind(this)
 
-    this.ents.player1 = new Player(this, defaultConfig.playerPos.x, defaultConfig.playerPos.y, 'player1');
-    // this.ents.player1.setScale(Scale)
+    this.ents.player1 = new Player(this, defaultConfig.playerPos.x, defaultConfig.playerPos.y, 'PinkyWinky');
 
-    this.ents.player2 = new Player(this, Canvas.width - defaultConfig.playerPos.x, defaultConfig.playerPos.y, 'player2');
-    // this.ents.player2.setScale(Scale)
+    this.ents.player2 = new Player(this, Canvas.width - defaultConfig.playerPos.x, defaultConfig.playerPos.y, 'BlueBlue');
+
+    this.physics.world.TILE_BIAS = 64;
 
     this.physics.add.collider(this.ents.player1, layer);
     this.physics.add.collider(this.ents.player2, layer);
     this.physics.add.collider(this.ents.ball, layer);
 
-    this.ents.startOverlap = this.physics.add.overlap(this.ents.ball, this.ents.player1, setOwn);
-    this.ents.startOverlap2 = this.physics.add.overlap(this.ents.ball, this.ents.player2, setOwn);
+    
+    //this.ents.startOverlap2 = this.physics.add.overlap(this.ents.ball, this.ents.player2, setOwn);
 
     this.stop()
 
@@ -194,16 +204,14 @@ class Game extends Phaser.Scene {
   }
 
   update() {
-    if (this.gameplay) {
-      this.ents.ball.moveToPlayer(this);
-      this.player.walk()
-      this.updatePosSocket()
+    //if (this.gameplay) {
+    this.ents.ball.moveToPlayer(this);
+    this.player.walk()
+    this.updatePosSocket()
 
-      Player.updateTexture(this.player)
-      Player.updateTexture(this.otherPlayer)
-    }
-    // this.ents.player2.walk();
-    // this.ents.player1.alternativeWalk();
+    Player.updateTexture(this.player)
+    Player.updateTexture(this.otherPlayer)
+    //}
   }
 
 }

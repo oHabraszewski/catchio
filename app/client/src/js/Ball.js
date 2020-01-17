@@ -50,7 +50,7 @@ class Ball extends Phaser.GameObjects.Sprite {
                     player2 = temp
                 }
 
-                if (player2.cursors.down.isDown) {
+                if (player2.cursors.down.isDown || player2.keys.S.isDown) {
                     updateBallOwner.call(this)
                     player2.ball = player1.ball
                     player2.ball.owner = player2
@@ -60,8 +60,6 @@ class Ball extends Phaser.GameObjects.Sprite {
                 }
             }
         }
-        //this.ents.startOverlap.destroy();
-        //this.ents.startOverlap2.destroy();
     }
 }
 export default Ball;
