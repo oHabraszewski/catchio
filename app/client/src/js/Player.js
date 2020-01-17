@@ -4,7 +4,7 @@ import { Canvas } from "./config/Screen";
 
 
 class Player extends Phaser.GameObjects.Sprite {
-  constructor(scene, x, y, texture, ) {
+  constructor(scene, x, y, texture) {
     super(scene, x, y, texture);
 
     this.pointsIndex = null
@@ -18,7 +18,7 @@ class Player extends Phaser.GameObjects.Sprite {
     scene.physics.world.enable(this);
 
     this.body.setCollideWorldBounds(true);
-    this.body.setMaxVelocity(Canvas.width / 5, 1500);
+    this.body.setMaxVelocity(Canvas.width / 5, 2000);
     this.body.setDrag(1000, 50);
 
     this.cursors = scene.input.keyboard.createCursorKeys();
@@ -30,41 +30,37 @@ class Player extends Phaser.GameObjects.Sprite {
   }
 
   walk() {
-    if (this.cursors.left.isDown) { // Ruch w lewo
+    if (this.cursors.left.isDown || this.keys.A.isDown) { // Ruch w lewo
       this.body.setAccelerationX(-this.acceleration);
-    } else if (this.cursors.right.isDown) { // Ruch w prawo
+    } else if (this.cursors.right.isDown || this.keys.D.isDown) { // Ruch w prawo
       this.body.setAccelerationX(this.acceleration);
     } else {
       this.body.setAccelerationX(0);
     }
 
-    if (this.cursors.up.isDown && this.body.velocity.y == 0 && this.body.blocked.down && !(this.body.blocked.up)) { // Skok
+    if ((this.cursors.up.isDown || this.keys.W.isDown)&& this.body.velocity.y == 0 && this.body.blocked.down && !(this.body.blocked.up)) { // Skok
       this.body.setVelocityY(this.jumpSpeed);
     }
 
   }
 
   static updateTexture(player) {
-    let isY = true;
-
-    if (player.body.velocity.y < -75) {
-      player.setTexture(`up${player.defaultSpriteId}`)
-    }
-    else if (player.body.velocity.y > 75) {
-      player.setTexture(`down${player.defaultSpriteId}`)
-    } else {
-      isY = false;
-    }
+    let prefix = ['','']
 
     if (player.body.velocity.x < -75) {
-      player.setTexture(`left${player.defaultSpriteId}`)
+      prefix[0] = 'left'
     }
     else if (player.body.velocity.x > 75) {
-      player.setTexture(`right${player.defaultSpriteId}`)
-    } else if (!isY) {
-      player.setTexture(player.defaultSpriteId)
+      prefix[0] = 'right'
     }
 
+    if (player.body.velocity.y < -75) {
+      prefix[1] = "up"
+    }
+    else if (player.body.velocity.y > 75) {
+      prefix[1] = "down"
+    } 
+    player.setFrame(prefix[0] + prefix[1] + player.defaultSpriteId)
   }
   // static getBall(player1, player2) {
   //   if (player1.ball == null && player2.ball == null) return

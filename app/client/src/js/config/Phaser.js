@@ -17,7 +17,7 @@ const config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: Canvas.height * 1.6 }, // Dzieki temu na kazdym rozmiarze monitora gracz bedzie spadal tyle samo czasu
+            gravity: { y: Canvas.height * 1.8 }, // Dzieki temu na kazdym rozmiarze monitora gracz bedzie spadal tyle samo czasu
             debug: false
         }
     },
