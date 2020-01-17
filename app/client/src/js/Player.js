@@ -9,7 +9,6 @@ class Player extends Phaser.GameObjects.Sprite {
 
     this.pointsIndex = null
     this.defaultSpriteId = ''
-    this.human = true
     this.ball = null
     this.jumpSpeed = -Canvas.height;
     this.acceleration = Canvas.width / 2;
@@ -23,10 +22,6 @@ class Player extends Phaser.GameObjects.Sprite {
 
     this.cursors = scene.input.keyboard.createCursorKeys();
     this.keys = scene.input.keyboard.addKeys('W,S,A,D');
-  }
-
-  setHuman(flag) {
-    this.human = flag
   }
 
   walk() {

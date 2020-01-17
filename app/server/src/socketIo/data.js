@@ -12,10 +12,20 @@ const GENERATE_CONFIGS_CONFIGS = {
             }
         },
         {
-            id: '2'
+            id: '2',
+            startPosition: {
+                x: 200,
+                y: 500,
+                ballY: 400
+            }
         },
         {
-            id: '3'
+            id: '3',
+            startPosition: {
+                x: 200,
+                y: 500,
+                ballY: 400
+            }
         }
     ],
     sprites: ['player1', 'player2']

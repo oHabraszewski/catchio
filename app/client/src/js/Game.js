@@ -21,7 +21,6 @@ class Game extends Phaser.Scene {
   constructor(setup) {
     super(setup);
     this.ents = {}
-    //this.gameplay = true
     this.updatePosSocket = updatePos.bind(this)
     this.points = [0, 0]
     this.canvas = null;
@@ -65,26 +64,27 @@ class Game extends Phaser.Scene {
     this.ents.ball.setPosition(Canvas.width / 2, defaultConfig.ballY)
   }
   resetPlayer(key){
-    this.ents['player' + key].keys.W.isDown = false;
-    this.ents['player' + key].keys.S.isDown = false;
-    this.ents['player' + key].keys.A.isDown = false;
-    this.ents['player' + key].keys.D.isDown = false;
-    this.ents['player' + key].cursors.up.isDown = false;
-    this.ents['player' + key].cursors.down.isDown = false;
-    this.ents['player' + key].cursors.left.isDown = false;
-    this.ents['player' + key].cursors.right.isDown = false;
-    this.ents['player' + key].body.setVelocity(0,0)
-    this.ents['player' + key].ball = null
+    const playerId = `player${key}`
+    this.ents[playerId].keys.W.isDown = false;
+    this.ents[playerId].keys.S.isDown = false;
+    this.ents[playerId].keys.A.isDown = false;
+    this.ents[playerId].keys.D.isDown = false;
+    this.ents[playerId].cursors.up.isDown = false;
+    this.ents[playerId].cursors.down.isDown = false;
+    this.ents[playerId].cursors.left.isDown = false;
+    this.ents[playerId].cursors.right.isDown = false;
+    this.ents[playerId].body.setVelocity(0,0)
+    this.ents[playerId].ball = null
   }
 
   resetForGamplay(gameConfig) {
     const startPosition = gameConfig.map.startPosition
 
     this.ents.player1.setPosition(startPosition.x, startPosition.y)
-    this.resetPlayer(1)
+    this.resetPlayer('1')
 
     this.ents.player2.setPosition(Canvas.width - startPosition.x, startPosition.y)
-    this.resetPlayer(2)
+    this.resetPlayer('2')
 
     this.ents.ball.setPosition(Canvas.width / 2, startPosition.ballY)
     this.ents.ball.body.setVelocity(0,0)
@@ -103,7 +103,7 @@ class Game extends Phaser.Scene {
           this.player.pointsIndex = 1
         }
         this.ents.startOverlap = this.physics.add.overlap(this.ents.ball, this.player, this.setOwn);
-        this.player.setHuman(true)
+
       } else {
         this.otherPlayer = this.ents[gameConfig.sprites[socketId]]
         this.otherPlayer.defaultSpriteId = gameConfig.sprites[socketId]
@@ -113,10 +113,12 @@ class Game extends Phaser.Scene {
         } else {
           this.otherPlayer.pointsIndex = 1
         }
-
-        this.otherPlayer.setHuman(false)
       }
     }
+
+
+    // id mapy pod: gameConfig.map.id
+    // mapy oraz startPosition dla mapy jest dostęna pod: app/server/src/socketIo/data.js
     //  set map
   }
 
@@ -126,16 +128,12 @@ class Game extends Phaser.Scene {
     this.resetForGamplay(gameConfig)
     this.ents.interface.createTimer().then(() => {
       this.scene.resume()
-      //this.gameplay = true
     })
   }
 
   stop() {
-    //if (this.gameplay) {
-      //this.gameplay = false
     this.scene.pause()
     this.resetToDefault()
-    //}
   }
 
   create() {
@@ -189,29 +187,23 @@ class Game extends Phaser.Scene {
     this.physics.add.collider(this.ents.player2, layer);
     this.physics.add.collider(this.ents.ball, layer);
 
-    
-    //this.ents.startOverlap2 = this.physics.add.overlap(this.ents.ball, this.ents.player2, setOwn);
-
     this.stop()
 
     this.ents.interface = new Interface(this)
     setTimeout(() => { this.ents.interface.updatePoints(0, 0) }, 1000)//Musi być dla dobrej czcionki
     this.time.advancedTiming = true
 
-
     this.socket = io(/* dev:start */ 'localhost:8000' /* dev:end */)
     connection.connect.call(this)
   }
 
   update() {
-    //if (this.gameplay) {
     this.ents.ball.moveToPlayer(this);
     this.player.walk()
     this.updatePosSocket()
 
     Player.updateTexture(this.player)
     Player.updateTexture(this.otherPlayer)
-    //}
   }
 
 }

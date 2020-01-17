@@ -5,11 +5,10 @@ export default function () {
     })
 
     this.socket.on('newBallOwner', () => {
-        const ball = this.player.ball
+        const ball = this.ents.ball
         this.otherPlayer.ball = ball
         ball.owner = this.otherPlayer
 
         this.player.ball = null
     })
-
 }

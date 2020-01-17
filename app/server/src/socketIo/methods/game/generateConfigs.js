@@ -3,8 +3,8 @@ const data = require('../../data')
 
 module.exports = (room, changePlayers = true) => {
     const configs = {
-        // map: randomArrayElement(data.const.GENERATE_CONFIGS_CONFIGS.maps)
-        map: data.const.GENERATE_CONFIGS_CONFIGS.maps[0]
+        map: randomArrayElement(data.const.GENERATE_CONFIGS_CONFIGS.maps)
+        // map: data.const.GENERATE_CONFIGS_CONFIGS.maps[0]
     }
 
     const spritesIds = [...data.const.GENERATE_CONFIGS_CONFIGS.sprites]
