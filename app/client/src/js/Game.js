@@ -40,7 +40,7 @@ class Game extends Phaser.Scene {
     this.load.tilemapCSV("map", "/assets/img/map/map.csv");
     this.load.image("tiles", "/assets/img/map/tiles.png");
 
-    this.load.image('ball', "/assets/img/bol.png");
+    this.load.image('ball', "/assets/img/Bol.png");
 
     this.load.image('player1', "/assets/img/red/PinkyWinky.png");         //Wkrótce przerobię na atlas
     this.load.image('upplayer1', "/assets/img/red/upPinkyWinky.png");

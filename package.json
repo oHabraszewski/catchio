@@ -2,8 +2,8 @@
     "name": "phaser-multiplayer-game-template",
     "version": "1.0.0",
     "scripts": {
-        "start": "gulp",
-        "build": "gulp build"
+        "start": "node ./server/index.js",
+        "dev": "gulp"
     },
     "devDependencies": {
         "@babel/core": "7.7.7",
