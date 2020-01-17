@@ -115,7 +115,46 @@ class Game extends Phaser.Scene {
         }
       }
     }
+    const map = this.make.tilemap({ key: "map" + gameConfig.map.id, tileWidth: 40, tileHeight: 40 });
+    const tileset = map.addTilesetImage("tiles");
+    this.ents.layer = map.createStaticLayer(0, tileset, 0, 0);
+    this.ents.layer.setCollision([3, 0])
 
+    this.ents.layer.setTileIndexCallback(5, (object, obj) => {
+      if (canShotL && object == this.ents.ball) {
+        canShotL = false;
+        this.points[1]++
+        this.ents.interface.updatePoints(this.points[0], this.points[1])
+        shotLTimeout = setTimeout(() => {
+          this.stop()
+          if (this.player.pointsIndex == 1) this.socket.emit('restart')
+        }, 500)
+        setTimeout(() => { canShotL = true }, 5000)
+      }
+    })
+
+    this.ents.layer.setTileIndexCallback(2, (object, obj) => {
+      if (canShotR && object == this.ents.ball) {
+        canShotR = false;
+        this.points[0]++
+        this.ents.interface.updatePoints(this.points[0], this.points[1])
+        shotRTimeout = setTimeout(() => {
+          this.stop()
+          if (this.player.pointsIndex == 0) this.socket.emit('restart')
+        }, 500)
+        setTimeout(() => { canShotR = true }, 5000)
+      }
+    })
+    this.ents.player1.setDepth(1)
+    this.ents.player2.setDepth(1)
+    this.ents.ball.setDepth(1)
+    this.ents.colls.p1l.destroy()
+    this.ents.colls.p2l.destroy()
+    this.ents.colls.bl.destroy()
+
+    this.ents.colls.p1l = this.physics.add.collider(this.ents.player1, this.ents.layer);
+    this.ents.colls.p2l = this.physics.add.collider(this.ents.player2, this.ents.layer);
+    this.ents.colls.bl = this.physics.add.collider(this.ents.ball, this.ents.layer);
 
     // id mapy pod: gameConfig.map.id
     // mapy oraz startPosition dla mapy jest dostęna pod: app/server/src/socketIo/data.js
@@ -144,10 +183,10 @@ class Game extends Phaser.Scene {
     //Konfiguracja mapy z tileów
     const map = this.make.tilemap({ key: "map3", tileWidth: 40, tileHeight: 40 }); // nie wiemy na ten moment jaka będzie mapa
     const tileset = map.addTilesetImage("tiles");
-    const layer = map.createStaticLayer(0, tileset, 0, 0);
-    layer.setCollision([3, 0])
+    this.ents.layer = map.createStaticLayer(0, tileset, 0, 0);
+    this.ents.layer.setCollision([3, 0])
 
-    layer.setTileIndexCallback(5, (object, obj) => {
+    this.ents.layer.setTileIndexCallback(5, (object, obj) => {
       if (canShotL && object == this.ents.ball) {
         canShotL = false;
         this.points[1]++
@@ -160,7 +199,7 @@ class Game extends Phaser.Scene {
       }
     })
 
-    layer.setTileIndexCallback(2, (object, obj) => {
+    this.ents.layer.setTileIndexCallback(2, (object, obj) => {
       if (canShotR && object == this.ents.ball) {
         canShotR = false;
         this.points[0]++
@@ -183,9 +222,10 @@ class Game extends Phaser.Scene {
 
     this.physics.world.TILE_BIAS = 64;
 
-    this.physics.add.collider(this.ents.player1, layer);
-    this.physics.add.collider(this.ents.player2, layer);
-    this.physics.add.collider(this.ents.ball, layer);
+    this.ents.colls = {}
+    this.ents.colls.p1l = this.physics.add.collider(this.ents.player1, this.ents.layer);
+    this.ents.colls.p2l = this.physics.add.collider(this.ents.player2, this.ents.layer);
+    this.ents.colls.bl = this.physics.add.collider(this.ents.ball, this.ents.layer);
 
     this.stop()
 
@@ -201,7 +241,7 @@ class Game extends Phaser.Scene {
     this.ents.ball.moveToPlayer(this);
     this.player.walk()
     this.updatePosSocket()
-
+    console.log(this.ents.player1.x)
     Player.updateTexture(this.player)
     Player.updateTexture(this.otherPlayer)
   }
