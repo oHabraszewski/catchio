@@ -36,31 +36,12 @@ class Game extends Phaser.Scene {
     this.load.atlas("PinkyWinky", '/assets/img/red/atlasPinkyWinky.png', '/assets/img/red/atlasPinkyWinky.json')
 
     this.load.atlas("BlueBlue", '/assets/img/blue/atlasBlueBlue.png', '/assets/img/blue/atlasBlueBlue.json')
-    // this.load.image('player1', "/assets/img/red/PinkyWinky.png");         //Przerobiłem na atlas
-    // this.load.image('upplayer1', "/assets/img/red/upPinkyWinky.png");
-    // this.load.image('leftplayer1', "/assets/img/red/leftPinkyWinky.png");
-    // this.load.image('downplayer1', "/assets/img/red/downPinkyWinky.png");
-    // this.load.image('rightplayer1', "/assets/img/red/rightPinkyWinky.png");
-    // this.load.image('leftupplayer1', "/assets/img/red/leftupPinkyWinky.png");
-    // this.load.image('leftdownplayer1', "/assets/img/red/leftdownPinkyWinky.png");
-    // this.load.image('rightupplayer1', "/assets/img/red/rightupPinkyWinky.png");
-    // this.load.image('rightdownplayer1', "/assets/img/red/rightdownPinkyWinky.png");
-
-    // this.load.image('player2', "/assets/img/blue/BlueBlue.png");
-    // this.load.image('upplayer2', "/assets/img/blue/upBlueBlue.png");
-    // this.load.image('leftplayer2', "/assets/img/blue/leftBlueBlue.png");
-    // this.load.image('downplayer2', "/assets/img/blue/downBlueBlue.png");
-    // this.load.image('rightplayer2', "/assets/img/blue/rightBlueBlue.png");
-    // this.load.image('leftupplayer2', "/assets/img/blue/leftupBlueBlue.png");
-    // this.load.image('leftdownplayer2', "/assets/img/blue/leftdownBlueBlue.png");
-    // this.load.image('rightupplayer2', "/assets/img/blue/rightupBlueBlue.png");
-    // this.load.image('rightdownplayer2', "/assets/img/blue/rightdownBlueBlue.png");
   }
 
   resetToDefault() {
     this.points[0] = 0
     this.points[1] = 0
-    this.ents.interface.updatePoints('', '')
+    this.ents.interface.updatePoints('0', '0')
 
     this.ents.player1.setPosition(defaultConfig.playerPos.x, defaultConfig.playerPos.y)
     this.ents.player2.setPosition(Canvas.width - defaultConfig.playerPos.x, defaultConfig.playerPos.y)
@@ -143,7 +124,7 @@ class Game extends Phaser.Scene {
     if (shotLTimeoutGlobal != null) clearTimeout(shotLTimeoutGlobal)
     if (shotRTimeoutGlobal != null) clearTimeout(shotRTimeoutGlobal)
     this.resetForGamplay(gameConfig)
-    this.ents.interface.updatePoints(0, 0)
+    //this.ents.interface.updatePoints(0, 0) Po kij to tu wstawiasz, tylko psuje grę
     this.ents.interface.createTimer().then(() => {
       if (this.gamplay) this.scene.resume()
     })

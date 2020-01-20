@@ -22,9 +22,9 @@ class Ball extends Phaser.GameObjects.Sprite {
 
             const a = Math.abs(this.body.x - this.owner.body.x)
             const b = Math.abs(this.body.y - this.owner.body.y)
-            const distanceToOwner = Math.sqrt(Math.pow(a, 2) * Math.pow(b, 2))
+            const distanceToOwner = Math.sqrt(Math.pow(a, 2) + /*Możesz wierzyć lub nie, ale tu jest dodawanie, nie mnożenie*/ Math.pow(b, 2))
 
-            if (distanceToOwner > 1000) {
+            if (distanceToOwner > 50) {
                 game.ents.colls.bl.overlapOnly = true
             } else {
                 if (game.ents.colls.bl.overlapOnly) game.ents.colls.bl.overlapOnly = false

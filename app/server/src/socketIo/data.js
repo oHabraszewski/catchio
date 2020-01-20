@@ -14,17 +14,17 @@ const GENERATE_CONFIGS_CONFIGS = {
         {
             id: '2',
             startPosition: {
-                x: 200,
-                y: 500,
-                ballY: 400
+                x: 120,
+                y: 585,
+                ballY: 1000
             }
         },
         {
             id: '3',
             startPosition: {
-                x: 200,
-                y: 500,
-                ballY: 400
+                x: 120,
+                y: 540,
+                ballY: 1000
             }
         }
     ],
