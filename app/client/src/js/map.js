@@ -17,7 +17,7 @@ export default function (mapId) {
             this.points[1]++
             this.ents.interface.updatePoints(this.points[0], this.points[1])
             shotLTimeout = setTimeout(() => {
-                this.stop()
+                this.stop(false)
                 this.socket.emit('restart')
             }, 500)
             setTimeout(() => { canShotL = true }, 5000)
@@ -30,7 +30,7 @@ export default function (mapId) {
             this.points[0]++
             this.ents.interface.updatePoints(this.points[0], this.points[1])
             shotRTimeout = setTimeout(() => {
-                this.stop()
+                this.stop(false)
                 this.socket.emit('restart')
             }, 500)
             setTimeout(() => { canShotR = true }, 5000)

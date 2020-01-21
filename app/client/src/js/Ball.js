@@ -22,9 +22,9 @@ class Ball extends Phaser.GameObjects.Sprite {
 
             const a = Math.abs(this.body.x - this.owner.body.x)
             const b = Math.abs(this.body.y - this.owner.body.y)
-            const distanceToOwner = Math.sqrt(Math.pow(a, 2) + /*Możesz wierzyć lub nie, ale tu jest dodawanie, nie mnożenie*/ Math.pow(b, 2))
+            const distanceToOwner = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2))
 
-            if (distanceToOwner > 50) {
+            if (distanceToOwner > 40) {
                 game.ents.colls.bl.overlapOnly = true
             } else {
                 if (game.ents.colls.bl.overlapOnly) game.ents.colls.bl.overlapOnly = false
@@ -42,8 +42,6 @@ class Ball extends Phaser.GameObjects.Sprite {
     }
 
     static setOwner(ball, player) {
-        //this.scene.pause() Mini test
-        //setTimeout(()=>{console.log(this);this.scene.resume("default")}, 500)
         let player1 = this.ents.player1
         let player2 = this.ents.player2
 
@@ -51,6 +49,7 @@ class Ball extends Phaser.GameObjects.Sprite {
             player.ball = ball
             ball.owner = player
 
+            console.log('updateBallOwner: first')
             updateBallOwner.call(this)
 
         } else {
@@ -62,6 +61,7 @@ class Ball extends Phaser.GameObjects.Sprite {
                 }
 
                 if (player2.cursors.down.isDown || player2.keys.S.isDown) {
+                    console.log('updateBallOwner: next')
                     updateBallOwner.call(this)
                     player2.ball = player1.ball
                     player2.ball.owner = player2

@@ -18,8 +18,8 @@ export default function () {
         this.start(gameConfig)
     })
 
-    socket.on('stopGame', () => {
-        this.stop()
+    socket.on('stopGame', (hard) => {
+        this.stop(hard)
     })
 
     gamplay.call(this)
