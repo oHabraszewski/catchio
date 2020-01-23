@@ -31,6 +31,9 @@ class Game extends Phaser.Scene {
     this.load.tilemapCSV("map3", "/assets/img/map/map3.csv");
     this.load.image("tiles", "/assets/img/map/tiles.png");
 
+    this.load.audio("ping", "/assets/audio/point.wav");
+    this.load.audio("bum", "/assets/audio/go.mp3");
+
     this.load.image('ball', "/assets/img/Bol.png");
 
     this.load.atlas("PinkyWinky", '/assets/img/red/atlasPinkyWinky.png', '/assets/img/red/atlasPinkyWinky.json')
@@ -165,6 +168,7 @@ class Game extends Phaser.Scene {
     this.ents.colls.bl = this.physics.add.collider(this.ents.ball, this.ents.layer);
 
     this.ents.interface = new Interface(this)
+    this.ents.interface.updatePoints('0', '0')
     this.time.advancedTiming = true
 
     this.stop()

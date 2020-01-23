@@ -5,6 +5,7 @@ import wait from './utils/wait'
 class Interface {
     constructor(scene) {
         const size = 64;
+        this.scene = scene
         this.texts = {
             points1: scene.add.text(Canvas.width / 2 - 75, 42, '0', { fontFamily: 'Comfortaa', fontSize: size + 'px', stroke: "#111", strokeThickness: size / 5 }).setOrigin(0.5, 0.5),
             points2: scene.add.text(Canvas.width / 2 + 75, 42, '0', { fontFamily: 'Comfortaa', fontSize: size + 'px', stroke: "#111", strokeThickness: size / 5 }).setOrigin(0.5, 0.5),
@@ -23,13 +24,17 @@ class Interface {
         this.texts.points2.setText(p2Points)
     }
     async createTimer() {
-        this.texts.timer.setText('3')
+        this.texts.timer.setText('3');
+        this.scene.sound.play("ping")
         await wait(1000)
         this.texts.timer.setText('2');
+        this.scene.sound.play("ping")
         await wait(1000)
         this.texts.timer.setText('1');
+        this.scene.sound.play("ping")
         await wait(1000)
         this.texts.timer.setText('GO');
+        this.scene.sound.play("bum")
         clear.call(this)
         
         async function clear() {
