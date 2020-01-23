@@ -20,7 +20,7 @@ class Game extends Phaser.Scene {
     super(setup);
     this.ents = {}
     this.updatePosSocket = updatePos.bind(this)
-    this.gamplay = false
+    this.gamplay = true
     this.points = [0, 0]
     this.canvas = null;
   }
@@ -42,9 +42,10 @@ class Game extends Phaser.Scene {
   }
 
   resetToDefault() {
+    console.log(`to default`)
     this.points[0] = 0
     this.points[1] = 0
-    this.ents.interface.updatePoints('0', '0')
+    this.ents.interface.updatePoints('', '')
 
     this.ents.player1.setPosition(defaultConfig.playerPos.x, defaultConfig.playerPos.y)
     this.ents.player2.setPosition(Canvas.width - defaultConfig.playerPos.x, defaultConfig.playerPos.y)
@@ -61,11 +62,14 @@ class Game extends Phaser.Scene {
     this.ents[playerId].cursors.down.isDown = false;
     this.ents[playerId].cursors.left.isDown = false;
     this.ents[playerId].cursors.right.isDown = false;
+    this.ents[playerId].defaultSpriteId = ''
     this.ents[playerId].body.setVelocity(0, 0)
     this.ents[playerId].ball = null
   }
 
   resetForGamplay(gameConfig) {
+    this.ents.interface.updatePoints(this.points[0], this.points[1])
+    
     const startPosition = gameConfig.map.startPosition
 
     this.ents.player1.setPosition(startPosition.x, startPosition.y)
@@ -127,16 +131,17 @@ class Game extends Phaser.Scene {
     if (shotLTimeoutGlobal != null) clearTimeout(shotLTimeoutGlobal)
     if (shotRTimeoutGlobal != null) clearTimeout(shotRTimeoutGlobal)
     this.resetForGamplay(gameConfig)
-    //this.ents.interface.updatePoints(0, 0) Po kij to tu wstawiasz, tylko psuje grę
     this.ents.interface.createTimer().then(() => {
       if (this.gamplay) this.scene.resume()
     })
   }
 
-  stop() {
-    this.gamplay = false
-    this.scene.pause()
-    this.resetToDefault()
+  stop(hard = true) {
+    if (this.gamplay) {
+      this.gamplay = false
+      this.scene.pause()
+      if (hard) this.resetToDefault()
+    }
   }
 
   create() {

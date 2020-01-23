@@ -33,14 +33,14 @@ class Player extends Phaser.GameObjects.Sprite {
       this.body.setAccelerationX(0);
     }
 
-    if ((this.cursors.up.isDown || this.keys.W.isDown)&& this.body.velocity.y == 0 && this.body.blocked.down && !(this.body.blocked.up)) { // Skok
+    if ((this.cursors.up.isDown || this.keys.W.isDown) && this.body.velocity.y == 0 && this.body.blocked.down && !(this.body.blocked.up)) { // Skok
       this.body.setVelocityY(this.jumpSpeed);
     }
 
   }
 
   static updateTexture(player) {
-    let prefix = ['','']
+    let prefix = ['', '']
 
     if (player.body.velocity.x < -75) {
       prefix[0] = 'left'
@@ -54,7 +54,7 @@ class Player extends Phaser.GameObjects.Sprite {
     }
     else if (player.body.velocity.y > 75) {
       prefix[1] = "down"
-    } 
+    }
     player.setFrame(prefix[0] + prefix[1] + player.defaultSpriteId)
   }
   // static getBall(player1, player2) {

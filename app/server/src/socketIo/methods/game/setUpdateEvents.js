@@ -17,7 +17,7 @@ module.exports = (room) => {
     let restartEvent = true
     room.on('restart', (player) => {
         if (restartEvent && room.gameplay) {
-            room.emit('stopGame')
+            room.emit('stopGame', false)
             restartEvent = false
             room.gameplay = false
             player.score++
@@ -32,5 +32,5 @@ module.exports = (room) => {
             setTimeout(() => { restartEvent = true }, 4000);
         }
     })
-    
+
 }
