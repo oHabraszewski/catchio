@@ -9,7 +9,8 @@ class Interface {
         this.texts = {
             points1: scene.add.text(Canvas.width / 2 - 75, 42, '0', { fontFamily: 'Comfortaa', fontSize: size + 'px', stroke: "#111", strokeThickness: size / 5 }).setOrigin(0.5, 0.5),
             points2: scene.add.text(Canvas.width / 2 + 75, 42, '0', { fontFamily: 'Comfortaa', fontSize: size + 'px', stroke: "#111", strokeThickness: size / 5 }).setOrigin(0.5, 0.5),
-            timer: scene.add.text(Canvas.width / 2, Canvas.height / 2, "", { fontFamily: 'Comfortaa', fontSize: (size * 5) + 'px', stroke: "#111", strokeThickness: size * 4 / 5 }).setOrigin(0.5, 0.5)
+            timer: scene.add.text(Canvas.width / 2, Canvas.height / 2, "", { fontFamily: 'Comfortaa', fontSize: (size * 5) + 'px', stroke: "#111", strokeThickness: size * 4 / 5 }).setOrigin(0.5, 0.5),
+            waiting: scene.add.text(150, Canvas.height / 2, "", { fontFamily: 'Comfortaa', fontSize: (size * 2) + 'px', stroke: "#111", strokeThickness: size * 2 / 5 }).setOrigin(0, 0.5)
         }
     }
 
@@ -40,6 +41,19 @@ class Interface {
         async function clear() {
             await wait(750)
             this.texts.timer.setText('');
+        }
+    }
+    async createWaiting(){
+        console.log(this.scene.gamplay)
+        while(!this.scene.started){
+            this.texts.waiting.setText('Oczekiwanie na gracza');
+            await wait(250)
+            this.texts.waiting.setText('Oczekiwanie na gracza.');
+            await wait(250)
+            this.texts.waiting.setText('Oczekiwanie na gracza..');
+            await wait(250)
+            this.texts.waiting.setText('Oczekiwanie na gracza...');
+            await wait(250)
         }
     }
 }

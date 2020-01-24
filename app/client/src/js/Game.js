@@ -21,11 +21,13 @@ class Game extends Phaser.Scene {
     this.ents = {}
     this.updatePosSocket = updatePos.bind(this)
     this.gamplay = true
+    this.started = false
     this.points = [0, 0]
     this.canvas = null;
   }
 
   preload() {
+    this.load.image("loading", "/assets/img/background.png")
     this.load.tilemapCSV("map1", "/assets/img/map/map1.csv");
     this.load.tilemapCSV("map2", "/assets/img/map/map2.csv");
     this.load.tilemapCSV("map3", "/assets/img/map/map3.csv");
@@ -127,6 +129,7 @@ class Game extends Phaser.Scene {
   }
 
   start(gameConfig) {
+    this.started = true
     this.gamplay = true
     if (shotLTimeoutGlobal != null) clearTimeout(shotLTimeoutGlobal)
     if (shotRTimeoutGlobal != null) clearTimeout(shotRTimeoutGlobal)
@@ -152,8 +155,8 @@ class Game extends Phaser.Scene {
 
     // ------------------------------------------------------------------------
     // DOCELOWO TEGO MA NIE BYĆ ! to jest ekran "oczekiwania" na inncyh graczy
-
-    map.call(this, '3')
+    // map.call(this, '3')
+    this.add.image(960,540,"loading")
 
     // ------------------------------------------------------------------------
 
@@ -174,6 +177,7 @@ class Game extends Phaser.Scene {
 
     this.ents.interface = new Interface(this)
     this.ents.interface.updatePoints('0', '0')
+    this.ents.interface.createWaiting()
     this.time.advancedTiming = true
 
     this.stop()

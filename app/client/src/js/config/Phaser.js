@@ -7,6 +7,7 @@ import Phaser from 'phaser';
 
 const config = {
     type: Phaser.AUTO,
+    parent: "game",
     width: 1920, //Szerokość gry przyjmuje rozmiar okienka
     height: 1080, //Wysokość gry przyjmuje wysokość okienka
     scale: {

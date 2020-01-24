@@ -1,7 +1,7 @@
 export default {
     playerPos: {
-        x: 0,
+        x: -50,
         y: 0
     },
-    ballY: 0
+    ballY: -100
 }

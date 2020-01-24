@@ -1,15 +1,123 @@
 @import url('https://fonts.googleapis.com/css?family=Comfortaa:700&display=swap');
+
 * {
     margin: 0px;
     padding: 0px;
 }
+
+html,
 body {
-    background-color: black;
-    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
 }
+
 canvas {
     position: absolute;
     transform: translate(-50%, -50%);
     top: 50%;
     left: 50%;
+}
+
+.part {
+    width: 100%;
+    height: 100%;
+}
+
+#main,
+#credits,
+#game {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#main,
+#credits {
+    font-family: Comfortaa;
+    background: url('/assets/img/background.png');
+    background-size: cover;
+
+    h1 {
+        font-size: 95px;
+    }
+
+    h2 {
+        font-size: 45px;
+        text-shadow: 0px 0px 5px #ddd;
+    }
+
+    h3 {
+        font-size: 35px;
+        text-shadow: 0px 0px 5px #ddd;
+    }
+
+    h4 {
+        font-size: 30px;
+    }
+    p{
+        font-size: 22px;
+    }
+}
+#play,
+#crediting,
+.button {
+    padding: 5px;
+    height: 50px;
+    font-family: Comfortaa;
+    font-size: 25px;
+    color: black;
+    background-color: rgba(48, 48, 68, 0.2);
+    border: solid rgba(24, 24, 24, 0.45);
+}
+#play:hover,
+#crediting:hover,
+.button:hover{
+    cursor: pointer;
+}
+#play {
+    width: 75%;
+    margin: 5px 0px 5px 0px;
+    border-width: 2px 1px 2px 2px;
+    border-radius: 10px 0px 0px 10px
+}
+#crediting { 
+    position: relative;
+    width: 25%;
+    top: 2px;
+    margin: 5px 0px 5px 0px;
+    border-width: 2px 2px 2px 1px;
+    border-radius: 0px 10px 10px 0px
+}
+.button {
+    margin: 5px;
+    font-size: 18px;
+    height: 40px;
+    border-radius: 10px;
+}
+
+#bottom {
+    position: fixed;
+    transform: translate(-50%, -50%);
+    bottom: 5px;
+    left: 50%;
+    text-align: center
+}
+
+.center {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 48%;
+    left: 50%;
+    h1,
+    h2,
+    h3,
+    h4,
+    p {
+        text-align: center;
+    }
+}
+
+#game {
+    background-color: black;
 }
