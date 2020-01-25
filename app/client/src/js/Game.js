@@ -20,8 +20,7 @@ class Game extends Phaser.Scene {
     super(setup);
     this.ents = {}
     this.updatePosSocket = updatePos.bind(this)
-    this.gamplay = true
-    this.started = false
+    this.gameplay = true
     this.points = [0, 0]
     this.canvas = null;
   }
@@ -44,7 +43,8 @@ class Game extends Phaser.Scene {
   }
 
   resetToDefault() {
-    console.log(`to default`)
+    this.ents.interface.createWaiting()
+
     this.points[0] = 0
     this.points[1] = 0
     this.ents.interface.updatePoints('', '')
@@ -71,7 +71,7 @@ class Game extends Phaser.Scene {
 
   resetForGamplay(gameConfig) {
     this.ents.interface.updatePoints(this.points[0], this.points[1])
-    
+
     const startPosition = gameConfig.map.startPosition
 
     this.ents.player1.setPosition(startPosition.x, startPosition.y)
@@ -129,19 +129,18 @@ class Game extends Phaser.Scene {
   }
 
   start(gameConfig) {
-    this.started = true
-    this.gamplay = true
+    this.gameplay = true
     if (shotLTimeoutGlobal != null) clearTimeout(shotLTimeoutGlobal)
     if (shotRTimeoutGlobal != null) clearTimeout(shotRTimeoutGlobal)
     this.resetForGamplay(gameConfig)
     this.ents.interface.createTimer().then(() => {
-      if (this.gamplay) this.scene.resume()
+      if (this.gameplay) this.scene.resume()
     })
   }
 
   stop(hard = true) {
-    if (this.gamplay) {
-      this.gamplay = false
+    if (this.gameplay) {
+      this.gameplay = false
       this.scene.pause()
       if (hard) this.resetToDefault()
     }
@@ -154,9 +153,8 @@ class Game extends Phaser.Scene {
     this.canvas.setAttribute("height", 1080)
 
     // ------------------------------------------------------------------------
-    // DOCELOWO TEGO MA NIE BYĆ ! to jest ekran "oczekiwania" na inncyh graczy
-    // map.call(this, '3')
-    this.add.image(960,540,"loading")
+
+    this.loadingImg = this.add.image(960, 540, "loading")
 
     // ------------------------------------------------------------------------
 
@@ -177,10 +175,10 @@ class Game extends Phaser.Scene {
 
     this.ents.interface = new Interface(this)
     this.ents.interface.updatePoints('0', '0')
-    this.ents.interface.createWaiting()
     this.time.advancedTiming = true
 
     this.stop()
+
 
     this.socket = io(/* dev:start */ 'localhost:8000' /* dev:end */)
     connection.connect.call(this)

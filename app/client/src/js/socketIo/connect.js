@@ -8,8 +8,6 @@ export default function () {
     })
 
     socket.on('startGame', (gameConfig) => {
-        // console.log(`start game: `, gameConfig)
-        console.log(gameConfig)
         if (gameConfig.score) {
             rearengeScore.call(this, gameConfig.score)
         }

@@ -2,6 +2,9 @@ import { Canvas } from "./config/Screen";
 import wait from './utils/wait'
 
 //Plik zawierający klasę zarządzającą wszystkimi elementami interfejsu - Punktami, przyciskami itp.
+
+const waitMessage = 'Oczekiwanie na przeciwnika'
+
 class Interface {
     constructor(scene) {
         const size = 64;
@@ -19,42 +22,71 @@ class Interface {
         this.texts.points2.setDepth(value)
         this.texts.timer.setDepth(value)
     }
-    
+
     updatePoints(p1Points, p2Points) {
         this.texts.points1.setText(p1Points)
         this.texts.points2.setText(p2Points)
     }
+
     async createTimer() {
-        this.texts.timer.setText('3');
-        this.scene.sound.play("ping")
-        await wait(1000)
-        this.texts.timer.setText('2');
-        this.scene.sound.play("ping")
-        await wait(1000)
-        this.texts.timer.setText('1');
-        this.scene.sound.play("ping")
-        await wait(1000)
-        this.texts.timer.setText('GO');
-        this.scene.sound.play("bum")
-        clear.call(this)
-        
+        try {
+            this.texts.timer.setText('3');
+            this.scene.sound.play("ping")
+            await wait(1000)
+
+            if (!this.scene.gameplay) throw 'STOP_TIMER'
+            this.texts.timer.setText('2');
+            this.scene.sound.play("ping")
+            await wait(1000)
+
+            if (!this.scene.gameplay) throw 'STOP_TIMER'
+            this.texts.timer.setText('1');
+            this.scene.sound.play("ping")
+            await wait(1000)
+
+            if (!this.scene.gameplay) throw 'STOP_TIMER'
+            this.texts.timer.setText('GO');
+            this.scene.sound.play("bum")
+            clear.call(this)
+
+        } catch (err) { }
+
         async function clear() {
             await wait(750)
             this.texts.timer.setText('');
         }
     }
-    async createWaiting(){
-        console.log(this.scene.gamplay)
-        while(!this.scene.started){
-            this.texts.waiting.setText('Oczekiwanie na gracza');
-            await wait(250)
-            this.texts.waiting.setText('Oczekiwanie na gracza.');
-            await wait(250)
-            this.texts.waiting.setText('Oczekiwanie na gracza..');
-            await wait(250)
-            this.texts.waiting.setText('Oczekiwanie na gracza...');
-            await wait(250)
-        }
+
+    async createWaiting() {
+        this.scene.loadingImg.setDepth(1)
+        this.texts.waiting.setDepth(1)
+
+        this.scene.loadingImg.visible = true
+        this.texts.waiting.visible = true
+
+
+        try {
+            while (!this.scene.gameplay) {
+                this.texts.waiting.setText(`${waitMessage}`);
+                await wait(250)
+
+                if (this.scene.gameplay) throw ''
+                this.texts.waiting.setText(`${waitMessage}.`);
+                await wait(250)
+
+                if (this.scene.gameplay) throw ''
+                this.texts.waiting.setText(`${waitMessage}..`);
+                await wait(250)
+
+                if (this.scene.gameplay) throw ''
+                this.texts.waiting.setText(`${waitMessage}...`);
+
+                await wait(250)
+            }
+        } catch (err) { }
+
+        this.scene.loadingImg.visible = false
+        this.texts.waiting.visible = false
     }
 }
 export default Interface

@@ -42,7 +42,6 @@ class Room {
             const player = this.players[playerIn]
             if (!this.events[event][playerIn]) {
                 player.socket.on(event, function () {
-                    if (event != 'newPos') console.log(`on ${event}`)
                     callback(...arguments, player)
                 })
                 this.events[event][playerIn] = true

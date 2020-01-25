@@ -1,13 +1,13 @@
 export default function () {
     this.socket.on('updateOtherPlayer', (otherPlayer) => {
-        if (this.gamplay) {
+        if (this.gameplay) {
             this.otherPlayer.setPosition(otherPlayer.x, otherPlayer.y)
             this.otherPlayer.body.setVelocity(otherPlayer.xVel, otherPlayer.yVel)
         }
     })
 
     this.socket.on('newBallOwner', () => {
-        if (this.gamplay) {
+        if (this.gameplay) {
             const ball = this.ents.ball
             this.otherPlayer.ball = ball
             ball.owner = this.otherPlayer

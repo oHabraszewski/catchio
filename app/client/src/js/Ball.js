@@ -48,8 +48,6 @@ class Ball extends Phaser.GameObjects.Sprite {
         if (player1.ball == null && player2.ball == null) {
             player.ball = ball
             ball.owner = player
-
-            console.log('updateBallOwner: first')
             updateBallOwner.call(this)
 
         } else {
@@ -61,7 +59,6 @@ class Ball extends Phaser.GameObjects.Sprite {
                 }
 
                 if (player2.cursors.down.isDown || player2.keys.S.isDown) {
-                    console.log('updateBallOwner: next')
                     updateBallOwner.call(this)
                     player2.ball = player1.ball
                     player2.ball.owner = player2

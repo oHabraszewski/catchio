@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link rel="preload" as="image" href="/assets/img/background.png">
 
 </head>
 
@@ -13,7 +14,7 @@
 
     <div class="part" id="game"> </div>
 
-    <div class="part" id="credits">
+    <div class="part" id="credits" style="visibility: hidden;">
         <button id="toMainCredits" class="button">Powrót</button>
         <div class="center" style="width: 90%;">
             <h1>Twórcy</h1>
@@ -25,7 +26,13 @@
                 </div>
                 <br>
                 <div>
-                    <h3>Gra i strona tytułowa</h3>
+                    <h3>Gra i Multiplayer</h3>
+                    <p>Oskar Habraszewski</p>
+                    <p>Wiktor Jurkiewicz</p>
+                </div>
+                <br>
+                <div>
+                    <h3>Strona tytułowa</h3>
                     <p>Oskar Habraszewski</p>
                 </div>
                 <br>
@@ -44,7 +51,6 @@
                     <p>Dominika Dąbrowska</p>
                     <p>Jakub - zachęcenie nas do pracy poprzez brak własnego projektu</p>
                     <p>Jan Surmacz oraz Paweł Mazurek - pomoc w organizacji stoiska na ŚFN</p>
-
                 </div>
             </div>
         </div>
@@ -63,7 +69,7 @@
             </div>
         </div>
     </div>
-    
+
     <script src="/socket.io/socket.io.js"></script>
 </body>
 
