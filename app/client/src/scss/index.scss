@@ -55,10 +55,12 @@ canvas {
     h4 {
         font-size: 30px;
     }
-    p{
+
+    p {
         font-size: 22px;
     }
 }
+
 #play,
 #crediting,
 .button {
@@ -70,18 +72,21 @@ canvas {
     background-color: rgba(48, 48, 68, 0.2);
     border: solid rgba(24, 24, 24, 0.45);
 }
+
 #play:hover,
 #crediting:hover,
-.button:hover{
+.button:hover {
     cursor: pointer;
 }
+
 #play {
     width: 75%;
     margin: 5px 0px 5px 0px;
     border-width: 2px 1px 2px 2px;
     border-radius: 10px 0px 0px 10px
 }
-#crediting { 
+
+#crediting {
     position: relative;
     width: 25%;
     top: 2px;
@@ -89,6 +94,7 @@ canvas {
     border-width: 2px 2px 2px 1px;
     border-radius: 0px 10px 10px 0px
 }
+
 .button {
     margin: 5px;
     font-size: 18px;
@@ -109,6 +115,7 @@ canvas {
     transform: translate(-50%, -50%);
     top: 48%;
     left: 50%;
+
     h1,
     h2,
     h3,
