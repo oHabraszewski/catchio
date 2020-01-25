@@ -6,14 +6,20 @@ const startGame = require('./game/startGame')
 
 const data = require('../data')
 
+const { log } = require('../../logger/logger')
 
 
 module.exports = (socket) => {
     goodNumberOfRooms()
     const playersRoom = findPlayersRoom()
-    
+
+    log(`${socket.id} <- Adding player, room id: ${playersRoom.id}`)
+
     addPlayer(socket, playersRoom)
     startGame(playersRoom) // if can start game
+
+    log(`Rooms count: ${Object.keys(data.rooms).length}`)
+    
     console.log(data.rooms)
 }
 

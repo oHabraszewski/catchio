@@ -1,7 +1,10 @@
 const data = require('../../data')
 const generateConfigs = require('./generateConfigs')
 
+const { log } = require('../../../logger/logger')
+
 function startGame(room, changePlayers, addToConf = {}) {
+    log(`${room.id} <- Starting game`)
     room.emit('startGame', { ...generateConfigs(room, changePlayers), ...addToConf })
     room.gameplay = true
 }

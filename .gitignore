@@ -2,6 +2,7 @@ node_modules/
 dist/
 dev/
 build/
+logs/
 
 .DS_Store
 

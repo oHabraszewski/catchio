@@ -1,5 +1,6 @@
 class Room {
-    constructor() {
+    constructor(id) {
+        this.id = id
         this.players = {}
         this.playersCount = 0
 
