@@ -3,7 +3,7 @@ import wait from './utils/wait'
 
 //Plik zawierający klasę zarządzającą wszystkimi elementami interfejsu - Punktami, przyciskami itp.
 
-const waitMessage = 'Oczekiwanie na przeciwnika'
+const waitMessage = 'Oczekiwanie na gracza'
 
 class Interface {
     constructor(scene) {
