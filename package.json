@@ -11,7 +11,7 @@
         "babel-loader": "8.0.6",
         "babel-minify-webpack-plugin": "0.3.1",
         "babel-plugin-object-to-json-parse": "0.0.8",
-        "browser-sync": "2.26.7",
+        "browser-sync": "3.0.3",
         "core-js": "3.6.0",
         "css-loader": "3.4.0",
         "css-vars-ponyfill": "2.1.2",
