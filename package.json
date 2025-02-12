@@ -38,7 +38,7 @@
     },
     "dependencies": {
         "fs-extra": "^8.1.0",
-        "koa": "2.11.0",
+        "koa": "2.15.4",
         "koa-json": "^2.0.2",
         "koa-mount": "4.0.0",
         "koa-router": "7.4.0",
